@@ -44,4 +44,9 @@ describe("Class diagramm", function () {
         myrep.add_atribute("human", "janis");
         expect(myrep.exists_atribute("human", "janis")).toEqual(true);
     });
+    it(" should return false if check an atribute that has not been added", function () {
+        myrep.add_class("human");
+        myrep.add_atribute("human", "toms");
+        expect(myrep.exists_atribute("human", "janis")).toEqual(false);
+    });
 });
