@@ -45,7 +45,8 @@ function rep_init() {
         },
         delete_instance: function () {
             
-        }
+        },
+        exists_instance: function () {}
 
     };
     return repository;
