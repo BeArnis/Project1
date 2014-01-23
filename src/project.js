@@ -41,6 +41,9 @@ function rep_init() {
             }
         },
         add_instance: function () {
+
+        },
+        delete_instance: function () {
             
         }
 
