@@ -102,7 +102,8 @@ function rep_init() {
             }
             else return false;
         },
-        add_association: function () {}
+        add_association: function () {},
+        delete_association: function () {}
 
     };
     return repository;

@@ -74,6 +74,9 @@ describe("Class diagramm", function () {
     it(" should have a method that adds an association between classes", function () {
         expect(typeof (myrep.add_association)).toEqual("function");
     });
+    it(" should have a method that deletes an association between classes", function () {
+        expect(typeof (myrep.delete_association)).toEqual("function");
+    });
     it(" should return true if checked if a class exists that has been added", function () {
         myrep.add_class("human");
         expect(myrep.exists_class("human")).toEqual(true);
