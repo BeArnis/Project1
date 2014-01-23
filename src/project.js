@@ -2,9 +2,7 @@ function rep_init() {
     var repository = {
         class: {},
         add_class: function (item) {
-            this.class[item] = {
-
-        };
+            this.class[item] = {};
         },
         exists_class: function (class_name) {
             return class_name in this.class;
@@ -17,7 +15,8 @@ function rep_init() {
         },
         exists_atribute: function (class_name, atribute) {
             return atribute in this.class[class_name];
-        }
+        },
+        delete_atribute: function () {}
 
     };
     return repository;
