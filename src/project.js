@@ -81,7 +81,11 @@ function rep_init() {
             }
             else return false;
         },
-        delete_atribute_value: function () {}
+        delete_atribute_value: function (instance_name, atribute_name, value) {
+            if(this.instances[instance_name][atribute_name] === value) {
+                delete this.instances[instance_name][atribute_name];
+            }
+        }
 
     };
     return repository;
