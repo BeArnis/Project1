@@ -72,8 +72,15 @@ function rep_init() {
                 delete this.instances[second_instance]["linked_to"];
             }
         },
-        add_atribute_value: function () {},
-        exists_atribute_value: function () {},
+        add_atribute_value: function (instance_name, atribute_name, value) {
+            this.instances[instance_name][atribute_name] = value;
+        },
+        exists_atribute_value: function (instance_name, atribute_name, value) {
+            if(this.instances[instance_name][atribute_name] === value) {
+                return true;
+            }
+            else return false;
+        },
         delete_atribute_value: function () {}
 
     };

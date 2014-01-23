@@ -126,4 +126,9 @@ describe("Class diagramm", function () {
         myrep.delete_link("darbinieks", "atbildigais", "saimnieks");
         expect(myrep.exists_link("darbinieks", "atbildigais", "saimnieks")).toEqual(false);
     });
+    it(" should return true atribute is added to an instances and checked if it is there", function () {
+        myrep.add_instance("dzīvoklis");
+        myrep.add_atribute_value("dzīvoklis", "Iedzīvotājs", "baiba");
+        expect(myrep.exists_atribute_value("dzīvoklis", "Iedzīvotājs", "baiba")).toEqual(true);
+    });
 });
