@@ -73,7 +73,8 @@ function rep_init() {
             }
         },
         add_atribute_value: function () {},
-        exists_atribute_value: function () {}
+        exists_atribute_value: function () {},
+        delete_atribute_value: function () {}
 
     };
     return repository;
