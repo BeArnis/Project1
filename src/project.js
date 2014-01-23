@@ -39,6 +39,9 @@ function rep_init() {
                 delete this.class[super_class]["subclass"]["subcl"];
                 delete this.class[sub_class]["superclass"]["supcl"];
             }
+        },
+        add_instance: function () {
+            
         }
 
     };
