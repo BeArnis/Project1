@@ -16,7 +16,9 @@ function rep_init() {
         exists_atribute: function (class_name, atribute) {
             return atribute in this.class[class_name];
         },
-        delete_atribute: function () {}
+        delete_atribute: function (class_name, atribute) {
+            delete this.class[class_name][atribute];
+        }
 
     };
     return repository;

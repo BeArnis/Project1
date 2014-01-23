@@ -49,4 +49,10 @@ describe("Class diagramm", function () {
         myrep.add_atribute("human", "toms");
         expect(myrep.exists_atribute("human", "janis")).toEqual(false);
     });
+    it(" should return false if check an atribute that has been added but then deleted", function () {
+        myrep.add_class("human");
+        myrep.add_atribute("human", "toms");
+        myrep.delete_atribute("human", "toms");
+        expect(myrep.exists_atribute("human", "toms")).toEqual(false);
+    });
 });
