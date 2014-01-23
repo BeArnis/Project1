@@ -18,7 +18,8 @@ function rep_init() {
         },
         delete_atribute: function (class_name, atribute) {
             delete this.class[class_name][atribute];
-        }
+        },
+        add_generalization: function () {}
 
     };
     return repository;
