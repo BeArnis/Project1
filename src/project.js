@@ -5,7 +5,11 @@ function rep_init() {
             this.class[item] = {
 
         };
-    }
+        },
+        exists_class: function (item) {
+            
+        }
+
     };
     return repository;
 }
