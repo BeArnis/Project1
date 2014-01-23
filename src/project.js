@@ -13,10 +13,10 @@ function rep_init() {
             delete this.class[class_name];
         },
         add_atribute: function (class_name, atribute) {
-
+            this.class[class_name][atribute] = {};
         },
-        exists_atribute: function () {
-            
+        exists_atribute: function (class_name, atribute) {
+            return atribute in this.class[class_name];
         }
 
     };

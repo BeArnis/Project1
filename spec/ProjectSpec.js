@@ -17,17 +17,17 @@ describe("Class diagramm", function () {
     it(" should have a method that deletes a class", function () {
         expect(typeof (myrep.delete_class)).toEqual("function");
     });
-    it(" should have a method add atributeto a class", function () {
+    it(" should have a method add atribute a class", function () {
         expect(typeof (myrep.add_atribute)).toEqual("function");
     });
-    it(" should have a method check if atributeto exists", function () {
+    it(" should have a method check if atribute exists", function () {
         expect(typeof (myrep.exists_atribute)).toEqual("function");
     });
-    it(" should return true if checked a class that has been added", function () {
+    it(" should return true if checked if a class exists that has been added", function () {
         myrep.add_class("human");
         expect(myrep.exists_class("human")).toEqual(true);
     });
-    it(" should return false if checked a class that has not been added", function () {
+    it(" should return false if checked if a class exists that has not been added", function () {
         myrep.add_class("cat");
         expect(myrep.exists_class("person")).toEqual(false);
     });
@@ -35,5 +35,10 @@ describe("Class diagramm", function () {
         myrep.add_class("human");
         myrep.delete_class("human");
         expect(myrep.exists_class("human")).toEqual(false);
+    });
+    it(" should return true if check an atribute that has been added", function () {
+        myrep.add_class("human");
+        myrep.add_atribute("human", "janis");
+        expect(myrep.exists_atribute("human", "janis")).toEqual(true);
     });
 });
