@@ -110,4 +110,11 @@ describe("Class diagramm", function () {
         myrep.add_link("darbinieks", "atbildigais", "saimnieks");
         expect(myrep.exists_link("darbinieks", "atbildigais", "saimnieks")).toEqual(true);
     });
+    it(" should return false if there is a link between instances and it is deleted and we check if there is a link between these instances", function () {
+        myrep.add_instance("darbinieks");
+        myrep.add_instance("saimnieks");
+        myrep.add_link("darbinieks", "atbildigais", "saimnieks");
+        myrep.delete_link("darbinieks", "atbildigais", "saimnieks");
+        expect(myrep.exists_link("darbinieks", "atbildigais", "saimnieks")).toEqual(false);
+    });
 });

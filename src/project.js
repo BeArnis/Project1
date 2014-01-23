@@ -64,7 +64,14 @@ function rep_init() {
             }
             else return false;
         },
-        delete_link: function () {}
+        delete_link: function (first_instance, link_name, second_instance) {
+            if((this.instances[first_instance]["link_id"] === link_name) && (this.instances[second_instance]["link_id"] === link_name) && (this.instances[first_instance]["linked_to"] === second_instance) && (this.instances[second_instance]["linked_to"] === second_instance)) {
+                delete this.instances[first_instance]["link_id"];
+                delete this.instances[first_instance]["linked_to"];
+                delete this.instances[second_instance]["link_id"];
+                delete this.instances[second_instance]["linked_to"];
+            }
+        }
 
     };
     return repository;
