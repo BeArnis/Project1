@@ -103,7 +103,8 @@ function rep_init() {
             else return false;
         },
         add_association: function () {},
-        delete_association: function () {}
+        delete_association: function () {},
+        exists_association: function () {}
 
     };
     return repository;
