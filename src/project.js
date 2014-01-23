@@ -101,7 +101,8 @@ function rep_init() {
                 return true;
             }
             else return false;
-        }
+        },
+        add_association: function () {}
 
     };
     return repository;
