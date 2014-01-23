@@ -64,4 +64,10 @@ describe("Class diagramm", function () {
         myrep.delete_atribute("human", "toms");
         expect(myrep.exists_atribute("human", "toms")).toEqual(false);
     });
+    it(" should return true if we add a generalization and check it", function () {
+        myrep.add_class("animal");
+        myrep.add_class("human");
+        myrep.add_generalization("animal", "human");
+        expect(myrep.generalization_of("animal", "human")).toEqual(true);
+    });
 });

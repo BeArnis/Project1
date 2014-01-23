@@ -19,8 +19,21 @@ function rep_init() {
         delete_atribute: function (class_name, atribute) {
             delete this.class[class_name][atribute];
         },
-        add_generalization: function () {},
-        generalization_of: function () {},
+        add_generalization: function (super_class, sub_class) {
+            this.class[super_class]["subclass"] = {
+                subcl: sub_class
+            };
+            this.class[sub_class]["superclass"] = {
+                supcl: super_class
+            };
+        },
+        generalization_of: function (super_class, sub_class) {
+            if((this.class[super_class]["subclass"]["subcl"] == sub_class) && (this.class[sub_class]["superclass"]["supcl"] === super_class)) {
+                return true;
+            }
+            else return false;
+
+        },
         delete_generalization: function () {}
 
     };
