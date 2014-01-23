@@ -86,4 +86,8 @@ describe("Class diagramm", function () {
         myrep.delete_generalization("animal", "human");
         expect(myrep.generalization_of("animal", "human")).toEqual(false);
     });
+    it(" should return true if instance is created and checked if this instance exists in our repository", function () {
+        myrep.add_instance("darbinieks");
+        expect(myrep.exists_instance("darbinieks")).toEqual(true);
+    });
 });

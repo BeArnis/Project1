@@ -1,6 +1,7 @@
 function rep_init() {
     var repository = {
         class: {},
+        instances: {},
         add_class: function (item) {
             this.class[item] = {};
         },
@@ -40,13 +41,15 @@ function rep_init() {
                 delete this.class[sub_class]["superclass"]["supcl"];
             }
         },
-        add_instance: function () {
-
+        add_instance: function (instance_name) {
+            this.instances[instance_name] = {};
         },
         delete_instance: function () {
             
         },
-        exists_instance: function () {}
+        exists_instance: function (instance_name) {
+            return instance_name in this.instances;
+        }
 
     };
     return repository;
