@@ -53,6 +53,9 @@ describe("Class diagramm", function () {
     it(" should have a method that deletes a link between instances", function () {
         expect(typeof (myrep.delete_link)).toEqual("function");
     });
+    it(" should have a method that adds an atribute to an instances", function () {
+        expect(typeof (myrep.add_atribute_value)).toEqual("function");
+    });
     it(" should return true if checked if a class exists that has been added", function () {
         myrep.add_class("human");
         expect(myrep.exists_class("human")).toEqual(true);
