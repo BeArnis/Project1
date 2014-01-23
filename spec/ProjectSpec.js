@@ -70,4 +70,11 @@ describe("Class diagramm", function () {
         myrep.add_generalization("animal", "human");
         expect(myrep.generalization_of("animal", "human")).toEqual(true);
     });
+    it(" should return false if we add a generalization, delete it and then check it", function () {
+        myrep.add_class("animal");
+        myrep.add_class("human");
+        myrep.add_generalization("animal", "human");
+        myrep.delete_generalization("animal", "human");
+        expect(myrep.generalization_of("animal", "human")).toEqual(false);
+    });
 });

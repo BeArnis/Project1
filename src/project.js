@@ -34,7 +34,12 @@ function rep_init() {
             else return false;
 
         },
-        delete_generalization: function () {}
+        delete_generalization: function (super_class, sub_class) {
+            if((this.class[super_class]["subclass"]["subcl"] == sub_class) && (this.class[sub_class]["superclass"]["supcl"] === super_class)) {
+                delete this.class[super_class]["subclass"]["subcl"];
+                delete this.class[sub_class]["superclass"]["supcl"];
+            }
+        }
 
     };
     return repository;
