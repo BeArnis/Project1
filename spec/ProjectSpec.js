@@ -29,8 +29,11 @@ describe("Class diagramm", function () {
     it(" should have a method that adds generalizations", function () {
         expect(typeof (myrep.add_generalization)).toEqual("function");
     });
-    it(" should have a method that tells us if class1 has a generalizations with class2", function () {
+    it(" should have a method that tells us if class1 has a generalization with class2", function () {
         expect(typeof (myrep.generalization_of)).toEqual("function");
+    });
+    it(" should have a method that deletes a generalization", function () {
+        expect(typeof (myrep.delete_generalization)).toEqual("function");
     });
     it(" should return true if checked if a class exists that has been added", function () {
         myrep.add_class("human");
