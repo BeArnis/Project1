@@ -25,4 +25,9 @@ describe("Class diagramm", function () {
         myrep.add_class("cat");
         expect(myrep.exists_class("person")).toEqual(false);
     });
+    it(" should return false if checked a class that has been added and then deleted", function () {
+        myrep.add_class("human");
+        myrep.delete_class("human");
+        expect(myrep.exists_class("human")).toEqual(false);
+    });
 });

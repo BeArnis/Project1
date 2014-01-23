@@ -10,7 +10,7 @@ function rep_init() {
             return class_name in this.class;
         },
         delete_class: function (class_name) {
-            
+            delete this.class[class_name];
         }
 
     };
