@@ -8,6 +8,9 @@ function rep_init() {
         },
         exists_class: function (class_name) {
             return class_name in this.class;
+        },
+        delete_class: function (class_name) {
+            
         }
 
     };
