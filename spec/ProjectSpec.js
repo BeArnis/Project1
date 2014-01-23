@@ -104,4 +104,10 @@ describe("Class diagramm", function () {
         myrep.delete_instance("darbinieks");
         expect(myrep.exists_instance("darbinieks")).toEqual(false);
     });
+    it(" should return true if there is a link between instances", function () {
+        myrep.add_instance("darbinieks");
+        myrep.add_instance("saimnieks");
+        myrep.add_link("darbinieks", "atbildigais", "saimnieks");
+        expect(myrep.exists_link("darbinieks", "atbildigais", "saimnieks")).toEqual(true);
+    });
 });
