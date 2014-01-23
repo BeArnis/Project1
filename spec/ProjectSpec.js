@@ -14,4 +14,8 @@ describe("Class diagramm", function () {
     it(" should have a method that checks if class exists", function () {
         expect(typeof (myrep.exists_class)).toEqual("function");
     });
+    it(" should return true if checked a class that has been added", function () {
+        myrep.add_class("person");
+        expect(myrep.exists_class("person")).toEqual(true);
+    });
 });
