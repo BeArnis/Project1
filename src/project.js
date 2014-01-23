@@ -11,6 +11,9 @@ function rep_init() {
         },
         delete_class: function (class_name) {
             delete this.class[class_name];
+        },
+        add_atribute: function (class_name, atribute) {
+            this.class[class_name][atribute] = {};
         }
 
     };

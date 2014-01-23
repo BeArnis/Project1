@@ -17,6 +17,9 @@ describe("Class diagramm", function () {
     it(" should have a method that deletes a class", function () {
         expect(typeof (myrep.delete_class)).toEqual("function");
     });
+    it(" should have a method add atributeto a class", function () {
+        expect(typeof (myrep.add_atribute)).toEqual("function");
+    });
     it(" should return true if checked a class that has been added", function () {
         myrep.add_class("human");
         expect(myrep.exists_class("human")).toEqual(true);
