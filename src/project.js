@@ -85,7 +85,8 @@ function rep_init() {
             if(this.instances[instance_name][atribute_name] === value) {
                 delete this.instances[instance_name][atribute_name];
             }
-        }
+        },
+        add_instance_of: function () {}
 
     };
     return repository;
