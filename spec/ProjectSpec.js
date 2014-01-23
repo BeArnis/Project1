@@ -15,7 +15,11 @@ describe("Class diagramm", function () {
         expect(typeof (myrep.exists_class)).toEqual("function");
     });
     it(" should return true if checked a class that has been added", function () {
-        myrep.add_class("person");
-        expect(myrep.exists_class("person")).toEqual(true);
+        myrep.add_class("human");
+        expect(myrep.exists_class("human")).toEqual(true);
+    });
+    it(" should return false if checked a class that has not been added", function () {
+        myrep.add_class("cat");
+        expect(myrep.exists_class("person")).toEqual(false);
     });
 });

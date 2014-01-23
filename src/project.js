@@ -6,8 +6,8 @@ function rep_init() {
 
         };
         },
-        exists_class: function (item) {
-            return item in this.class;
+        exists_class: function (class_name) {
+            return class_name in this.class;
         }
 
     };
