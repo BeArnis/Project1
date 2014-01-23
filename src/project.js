@@ -86,7 +86,8 @@ function rep_init() {
                 delete this.instances[instance_name][atribute_name];
             }
         },
-        add_instance_of: function () {}
+        add_instance_of: function () {},
+        delete_instance_of: function () {}
 
     };
     return repository;
