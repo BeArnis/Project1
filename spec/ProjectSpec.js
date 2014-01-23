@@ -44,6 +44,9 @@ describe("Class diagramm", function () {
     it(" should have a method that checks if an instance exists", function () {
         expect(typeof (myrep.exists_instance)).toEqual("function");
     });
+    it(" should have a method that adds a link between instances", function () {
+        expect(typeof (myrep.add_link)).toEqual("function");
+    });
     it(" should return true if checked if a class exists that has been added", function () {
         myrep.add_class("human");
         expect(myrep.exists_class("human")).toEqual(true);
