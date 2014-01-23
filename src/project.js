@@ -87,7 +87,8 @@ function rep_init() {
             }
         },
         add_instance_of: function () {},
-        delete_instance_of: function () {}
+        delete_instance_of: function () {},
+        exists_instance_of: function () {}
 
     };
     return repository;
