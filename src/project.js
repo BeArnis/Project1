@@ -72,7 +72,8 @@ function rep_init() {
                 delete this.instances[second_instance]["linked_to"];
             }
         },
-        add_atribute_value: function () {}
+        add_atribute_value: function () {},
+        exists_atribute_value: function () {}
 
     };
     return repository;

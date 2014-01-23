@@ -56,6 +56,9 @@ describe("Class diagramm", function () {
     it(" should have a method that adds an atribute to an instances", function () {
         expect(typeof (myrep.add_atribute_value)).toEqual("function");
     });
+    it(" should have a method that checks if there is an atribute in an instances", function () {
+        expect(typeof (myrep.exists_atribute_value)).toEqual("function");
+    });
     it(" should return true if checked if a class exists that has been added", function () {
         myrep.add_class("human");
         expect(myrep.exists_class("human")).toEqual(true);
