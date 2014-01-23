@@ -90,7 +90,12 @@ function rep_init() {
             this.class[class_name]["has_instance"] = instance_name;
             this.instances[instance_name]["instance_of"] = class_name;
         },
-        delete_instance_of: function () {},
+        delete_instance_of: function (class_name, instance_name) {
+            if((this.class[class_name]["has_instance"] === instance_name) && (this.instances[instance_name]["instance_of"] = class_name)) {
+                delete this.class[class_name]["has_instance"];
+                delete this.instances[instance_name]["instance_of"];
+            }
+        },
         exists_instance_of: function (class_name, instance_name) {
             if((this.class[class_name]["has_instance"] === instance_name) && (this.instances[instance_name]["instance_of"] = class_name)) {
                 return true;

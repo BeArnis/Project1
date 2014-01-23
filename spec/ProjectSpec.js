@@ -152,4 +152,11 @@ describe("Class diagramm", function () {
         myrep.add_instance_of("person", "andris");
         expect(myrep.exists_instance_of("person", "andris")).toEqual(true);
     });
+    it(" should return false when we add an instance_of link, delete it and check if it is still there", function () {
+        myrep.add_class("person");
+        myrep.add_instance("andris");
+        myrep.add_instance_of("person", "andris");
+        myrep.delete_instance_of("person", "andris");
+        expect(myrep.exists_instance_of("person", "andris")).toEqual(false);
+    });
 });
