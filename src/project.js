@@ -52,7 +52,8 @@ function rep_init() {
             return instance_name in this.instances;
         },
         add_link: function () {},
-        exists_link: function () {}
+        exists_link: function () {},
+        delete_link: function () {}
 
     };
     return repository;
