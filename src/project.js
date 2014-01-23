@@ -86,9 +86,17 @@ function rep_init() {
                 delete this.instances[instance_name][atribute_name];
             }
         },
-        add_instance_of: function () {},
+        add_instance_of: function (class_name, instance_name) {
+            this.class[class_name]["has_instance"] = instance_name;
+            this.instances[instance_name]["instance_of"] = class_name;
+        },
         delete_instance_of: function () {},
-        exists_instance_of: function () {}
+        exists_instance_of: function (class_name, instance_name) {
+            if((this.class[class_name]["has_instance"] === instance_name) && (this.instances[instance_name]["instance_of"] = class_name)) {
+                return true;
+            }
+            else return false;
+        }
 
     };
     return repository;

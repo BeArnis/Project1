@@ -146,4 +146,10 @@ describe("Class diagramm", function () {
         myrep.delete_atribute_value("dzīvoklis", "Iedzīvotājs", "baiba");
         expect(myrep.exists_atribute_value("dzīvoklis", "Iedzīvotājs", "baiba")).toEqual(false);
     });
+    it(" should return true when we add an instance_of link and check if it is there", function () {
+        myrep.add_class("person");
+        myrep.add_instance("andris");
+        myrep.add_instance_of("person", "andris");
+        expect(myrep.exists_instance_of("person", "andris")).toEqual(true);
+    });
 });
