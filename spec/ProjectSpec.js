@@ -90,4 +90,9 @@ describe("Class diagramm", function () {
         myrep.add_instance("darbinieks");
         expect(myrep.exists_instance("darbinieks")).toEqual(true);
     });
+    it(" should return false if instance is created, deleted and checked if this instance exists in our repository", function () {
+        myrep.add_instance("darbinieks");
+        myrep.delete_instance("darbinieks");
+        expect(myrep.exists_instance("darbinieks")).toEqual(false);
+    });
 });

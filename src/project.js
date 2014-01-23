@@ -44,7 +44,8 @@ function rep_init() {
         add_instance: function (instance_name) {
             this.instances[instance_name] = {};
         },
-        delete_instance: function () {
+        delete_instance: function (instance_name) {
+            delete this.instances[instance_name];
             
         },
         exists_instance: function (instance_name) {
