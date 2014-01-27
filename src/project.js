@@ -25,9 +25,8 @@ function rep_init() {
         },
         add_generalization: function (super_class, sub_class) {
 
-            this.class[super_class]["subclass"].push(sub_class);   
+            this.class[super_class]["subclass"].push(sub_class);
             this.class[sub_class]["superclass"].push(super_class);
-            
         },
         generalization_of: function (super_class, sub_class) {
 
@@ -44,7 +43,10 @@ function rep_init() {
             delete this.class[sub_class]["subclass"][_.indexOf(this.class[sub_class]["subclass"], super_class)];
         },
         add_instance: function (instance_name) {
-            this.instances[instance_name] = {};
+            this.instances[instance_name] = {
+                link: [],
+                link_to: []
+            };
         },
         delete_instance: function (instance_name) {
             delete this.instances[instance_name];
@@ -54,25 +56,33 @@ function rep_init() {
             return instance_name in this.instances;
         },
         add_link: function (first_instance, link_name, second_instance) {
-            this.instances[first_instance]["link_id"] = link_name;
-            this.instances[first_instance]["linked_to"] = second_instance;
+            this.instances[first_instance]["link"].push(link_name);
+            this.instances[first_instance]["link_to"].push(second_instance);
 
-            this.instances[second_instance]["link_id"] = link_name;
-            this.instances[second_instance]["linked_to"] = second_instance;
+    
+            this.instances[second_instance]["link"].push(link_name);
+            this.instances[second_instance]["link_to"].push(second_instance);
+
         },
         exists_link: function (first_instance, link_name, second_instance) {
-            if((this.instances[first_instance]["link_id"] === link_name) && (this.instances[second_instance]["link_id"] === link_name) && (this.instances[first_instance]["linked_to"] === second_instance) && (this.instances[second_instance]["linked_to"] === second_instance)) {
-                return true;
+            if (_.indexOf(this.instances[first_instance]["link"], link_name) != -1) {
+                if (_.indexOf(this.instances[first_instance]["link_to"], second_instance) != -1) {
+                    if (_.indexOf(this.instances[second_instance]["link"], link_name) != -1) {
+                        if (_.indexOf(this.instances[second_instance]["link_to"], second_instance) != -1) {
+                            return true;
+                        }
+                    }
+                }
             }
-            else return false;
+            return false;
+
         },
         delete_link: function (first_instance, link_name, second_instance) {
-            if((this.instances[first_instance]["link_id"] === link_name) && (this.instances[second_instance]["link_id"] === link_name) && (this.instances[first_instance]["linked_to"] === second_instance) && (this.instances[second_instance]["linked_to"] === second_instance)) {
-                delete this.instances[first_instance]["link_id"];
-                delete this.instances[first_instance]["linked_to"];
-                delete this.instances[second_instance]["link_id"];
-                delete this.instances[second_instance]["linked_to"];
-            }
+        delete this.instances[first_instance]["link"][_.indexOf(this.instances[first_instance]["link"], link_name)];
+        delete this.instances[first_instance]["link_to"][_.indexOf(this.instances[first_instance]["link"], link_name)];
+
+        delete this.instances[second_instance]["link"][_.indexOf(this.instances[second_instance]["link"], link_name)];
+        delete this.instances[second_instance]["link_to"][_.indexOf(this.instances[second_instance]["link"], link_name)];
         },
         add_atribute_value: function (instance_name, atribute_name, value) {
             this.instances[instance_name][atribute_name] = value;

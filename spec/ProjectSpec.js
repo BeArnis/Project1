@@ -153,6 +153,15 @@ describe("Class diagramm", function () {
         myrep.delete_link("darbinieks", "atbildigais", "saimnieks");
         expect(myrep.exists_link("darbinieks", "atbildigais", "saimnieks")).toEqual(false);
     });
+    it(" should return true if there are two links between instances", function () {
+        myrep.add_instance("darbinieks");
+        myrep.add_instance("saimnieks");
+        myrep.add_instance("vadītājs");
+        myrep.add_link("darbinieks", "atbildigais", "saimnieks");
+        myrep.add_link("vadītājs", "uzrauga", "saimnieks");
+        expect(myrep.exists_link("vadītājs", "uzrauga", "saimnieks")).toEqual(true);
+        expect(myrep.exists_link("darbinieks", "atbildigais", "saimnieks")).toEqual(true);
+    });
     it(" should return true when atribute is added to an instances and checked if it is there", function () {
         myrep.add_instance("dzīvoklis");
         myrep.add_atribute_value("dzīvoklis", "Iedzīvotājs", "baiba");
