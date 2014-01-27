@@ -122,6 +122,15 @@ describe("Class diagramm", function () {
         myrep.delete_generalization("animal", "human");
         expect(myrep.generalization_of("animal", "human")).toEqual(false);
     });
+    it(" should return true if we add two generalization and then check if they both exist", function () {
+        myrep.add_class("animal");
+        myrep.add_class("human");
+        myrep.add_class("bird");
+        myrep.add_generalization("animal", "human");
+        myrep.add_generalization("animal", "bird");
+        expect(myrep.generalization_of("animal", "human")).toEqual(true);
+        expect(myrep.generalization_of("animal", "bird")).toEqual(true);
+    });
     it(" should return true if instance is created and checked if this instance exists in our repository", function () {
         myrep.add_instance("darbinieks");
         expect(myrep.exists_instance("darbinieks")).toEqual(true);
@@ -167,5 +176,11 @@ describe("Class diagramm", function () {
         myrep.add_instance_of("person", "andris");
         myrep.delete_instance_of("person", "andris");
         expect(myrep.exists_instance_of("person", "andris")).toEqual(false);
+    });
+    it(" should return true if association is added between two classes and checked if it is there", function () {
+        myrep.add_class("building");
+        myrep.add_class("land");
+        myrep.add_association("building", "2", "3", "land", "5", "6");
+        expect(myrep.exists_association("building", "2", "3", "land", "5", "6")).toEqual(true);
     });
 });

@@ -3,7 +3,10 @@ function rep_init() {
         class: {},
         instances: {},
         add_class: function (item) {
-            this.class[item] = {};
+            this.class[item] = {
+                superclass: [],
+                subclass: []
+            };
         },
         exists_class: function (class_name) {
             return class_name in this.class;
@@ -21,25 +24,24 @@ function rep_init() {
             delete this.class[class_name][atribute];
         },
         add_generalization: function (super_class, sub_class) {
-            this.class[super_class]["subclass"] = {
-                subcl: sub_class
-            };
-            this.class[sub_class]["superclass"] = {
-                supcl: super_class
-            };
+
+            this.class[super_class]["subclass"].push(sub_class);   
+            this.class[sub_class]["superclass"].push(super_class);
+            
         },
         generalization_of: function (super_class, sub_class) {
-            if((this.class[super_class]["subclass"]["subcl"] == sub_class) && (this.class[sub_class]["superclass"]["supcl"] === super_class)) {
-                return true;
-            }
-            else return false;
 
+            if (_.indexOf(this.class[super_class]["subclass"], sub_class) != -1) {
+                if (_.indexOf(this.class[sub_class]["superclass"], super_class) != -1) {
+                    return true;
+                }
+            }
+            return false;
         },
         delete_generalization: function (super_class, sub_class) {
-            if((this.class[super_class]["subclass"]["subcl"] == sub_class) && (this.class[sub_class]["superclass"]["supcl"] === super_class)) {
-                delete this.class[super_class]["subclass"]["subcl"];
-                delete this.class[sub_class]["superclass"]["supcl"];
-            }
+
+            delete this.class[super_class]["subclass"][_.indexOf(this.class[super_class]["subclass"], sub_class)];
+            delete this.class[sub_class]["subclass"][_.indexOf(this.class[sub_class]["subclass"], super_class)];
         },
         add_instance: function (instance_name) {
             this.instances[instance_name] = {};
@@ -102,9 +104,24 @@ function rep_init() {
             }
             else return false;
         },
-        add_association: function () {},
+        add_association: function (begin_class, begin_role, begin_kard, end_class, end_role, end_kard) {
+            this.class[begin_class]["assoc"] = { role: begin_role };
+            this.class[begin_class]["assoc"]["kard"] = begin_kard;
+            this.class[begin_class]["assoc"]["to_class"] = end_class;
+
+            this.class[end_class]["assoc"] = { role: end_role };
+            this.class[end_class]["assoc"]["kard"] = end_kard;
+            this.class[end_class]["assoc"]["to_class"] = begin_class;
+
+        },
         delete_association: function () {},
-        exists_association: function () {}
+        exists_association: function (begin_class, begin_role, begin_kard, end_class, end_role, end_kard) {
+            if((this.class[begin_class]["assoc"]["role"] === begin_role) && (this.class[begin_class]["assoc"]["kard"] === begin_kard) && (this.class[begin_class]["assoc"]["to_class"] === end_class) &&
+                (this.class[end_class]["assoc"]["role"] === end_role) && (this.class[end_class]["assoc"]["kard"] === end_kard) && (this.class[end_class]["assoc"]["to_class"] === begin_class)) {
+                return true;
+            }
+            else return false;
+        }
 
     };
     return repository;
