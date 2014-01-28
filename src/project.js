@@ -4,8 +4,11 @@ function rep_init() {
         instances: {},
         add_class: function (item) {
             this.class[item] = {
+                name: item,
                 superclass: [],
-                subclass: []
+                subclass: [],
+                width: 100,
+                height: 50
             };
         },
         exists_class: function (class_name) {
@@ -131,8 +134,39 @@ function rep_init() {
                 return true;
             }
             else return false;
+        },
+        select_all_classes: function () {
+                var m = [];
+                for(var key in this.class) {
+                    m.push(this.class[key]);
+                }
+                return m;
+        },
+        get_all_class_names: function () {
+            var m = [];
+                for(var key in this.class) {
+                    m.push(key);
+                }
+                return m;
+        },
+        select_all_generalizations: function () {
+            var sub = [];
+            var m = [];
+            for(var key in this.class) {
+                    m.push(key);
+                }
+            for(var star in this.class) {
+                for(var end in this.class[star]["superclass"]) {
+                    sub.push({
+                        source: _.indexOf(m, star),
+                        target: _.indexOf(m, this.class[star]["superclass"][end])
+                    });
+                    console.log(star);
+                    console.log(this.class[star]["superclass"]);
+                }
+            }
+            return sub;
         }
-
     };
     return repository;
 }

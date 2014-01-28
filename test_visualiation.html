@@ -14,7 +14,7 @@
   
   <!-- include source files here... -->
   <script type="text/javascript" src="src/Project.js"></script>
-  <script type="text/javascript" src="src/graph.js"></script>
+  <script type="text/javascript" src="src/graph1.js"></script>
   <!-- include spec files here... -->
   <style>
 
@@ -44,8 +44,30 @@
 
 <body>
   <script>
-    console.log(cola);
-    visual(cola);
+    myrep = rep_init();
+    myrep.add_class("animal");
+    myrep.add_class("human");
+    myrep.add_class("bird");
+    myrep.add_class("egg");
+    myrep.add_class("baby");
+    myrep.add_class("reptile");
+    myrep.add_class("mutant");
+    myrep.add_class("alien");
+    myrep.add_generalization("human", "mutant");
+    myrep.add_generalization("bird", "mutant");
+    myrep.add_generalization("animal", "reptile");
+    myrep.add_generalization("animal", "human");
+    myrep.add_generalization("animal", "bird");
+    myrep.add_generalization("human", "baby");
+    myrep.add_generalization("bird", "egg");
+    m = myrep.get_all_class_names();
+    var graph = {
+      class: myrep.select_all_classes(),
+      links: myrep.select_all_generalizations()
+    }
+    console.log(myrep.select_all_generalizations());
+    console.log(myrep.select_all_classes());
+    visual(cola, graph);
   </script>
 </body>
 </html>

@@ -192,4 +192,12 @@ describe("Class diagramm", function () {
         myrep.add_association("building", "2", "3", "land", "5", "6");
         expect(myrep.exists_association("building", "2", "3", "land", "5", "6")).toEqual(true);
     });
+    it(" should return true if we add two generalization and then check if they both exist", function () {
+        myrep.add_class("animal");
+        myrep.add_class("human");
+        myrep.add_class("bird");
+        myrep.add_generalization("animal", "human");
+        myrep.add_generalization("animal", "bird");
+        console.log(myrep.select_all_classes());
+    });
 });
