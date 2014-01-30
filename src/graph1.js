@@ -35,7 +35,7 @@ function visual (cola_lib, graph) {
 
 
     svg.append("defs").selectAll("marker")
-        .data(["suit", "licensing", "resolved"])
+        .data(["class", "instance"])
       .enter().append("marker")
         .attr("id", function(d) { return d; })
         .attr("viewBox", "0 -5 10 10")
@@ -51,8 +51,8 @@ function visual (cola_lib, graph) {
     var link = svg.selectAll(".link")
         .data(graph.links)
       .enter().append("line")
-        .attr("class", "link")
-        .attr("marker-end", function(d) { return "url(#suit)"; });
+        .attr("class", function(d) { return "link " + d.type; })
+        .attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
 
 
     var margin = 6, pad = 12;
