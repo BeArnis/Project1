@@ -182,7 +182,31 @@ function rep_init() {
                 inst.push(this.instances[key]);
             }
             return inst;
+        },
+        select_all_instances_of: function () {
+            var inst = [];
+            var k = [];
+            var m = [];
+            for(var key in this.class) {
+                    m.push(key);
+                }
+            for(var oh in this.instances) {
+                    k.push(oh);
+                }
+
+             for(var star in this.instances) {
+                for(var end in this.instances[star]["instance_of"]) {
+                    var i = this.instances[star]["instance_of"][end];
+                    inst.push({
+                        source: _.indexOf(m, this.instances[star]["instance_of"][end]),
+                        target: m.length + _.indexOf(k, star),
+                        type: "instance"
+                    });
+                }
+            }
+            return inst;
         }
+
     };
     return repository;
 }

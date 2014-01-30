@@ -86,9 +86,12 @@
     myrep.add_instance("lol");
     myrep.add_instance("yolo");
     myrep.add_instance("wtf");
+    myrep.add_instance_of("egg", "lol");
+    myrep.add_instance_of("mutant", "yolo");
+    myrep.add_instance_of("animal", "wtf");
     var graph = {
       nodes: (myrep.select_all_classes()).concat(myrep.select_all_instances()),
-      links: myrep.select_all_generalizations()
+      links: (myrep.select_all_generalizations()).concat(myrep.select_all_instances_of())
     }
     graph.groups = [
       { leaves:
@@ -98,11 +101,27 @@
             })
             .filter(_.isNumber)
             .value()
+      },
+      { leaves:
+          _.chain(graph.nodes)
+            .map(function (node, i) {
+              if(node.type === "instance") return i;
+            })
+            .filter(_.isNumber)
+            .value()
       }
     ];
-    //console.log(myrep.select_all_classes());
+    console.log(myrep.select_all_instances_of());
     console.log(graph);
     visual(cola, graph);
+    /*leaves:
+          _.chain(graph.nodes)
+            .map(function (node, i) {
+              if(node.type === "instance") return i;
+            })
+            .filter(_.isNumber)
+            .value()*/
   </script>
 </body>
 </html>
+

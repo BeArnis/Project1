@@ -24,7 +24,7 @@ function visual (cola_lib, graph) {
         .groups(graph.groups)
         .start(10, 10);
 
-    var group = svg.selectAll(".group")
+    var group = svg.selectAll(".groups")
         .data(graph.groups)
       .enter().append("rect")
         .attr("rx", 8).attr("ry", 8)
@@ -46,6 +46,8 @@ function visual (cola_lib, graph) {
       .append("path")
         .attr("d", "M0,-5L10,0L0,5");
 
+
+
     var link = svg.selectAll(".link")
         .data(graph.links)
       .enter().append("line")
@@ -62,7 +64,6 @@ function visual (cola_lib, graph) {
             .attr("class", "node")
             .attr("rx", 15).attr("ry", 15)
             .style("fill", function (d) { if(d.type === "instance") {return "red";} else { return "blue";} })
-
             .call(cola_a.drag);
 
 
@@ -93,6 +94,10 @@ function visual (cola_lib, graph) {
             .attr("width", function (d) { return d.innerBounds.width(); })
             .attr("height", function (d) { return d.innerBounds.height(); });
 
+        group.attr("x", function (d) { return d.bounds.x; })
+                 .attr("y", function (d) { return d.bounds.y; })
+                .attr("width", function (d) { return d.bounds.width(); })
+                .attr("height", function (d) { return d.bounds.height(); });
 
         link.each(function (d) {
             if (d.source === d.target) {
