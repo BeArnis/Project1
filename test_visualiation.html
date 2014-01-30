@@ -11,7 +11,7 @@
   <script type="text/javascript" src="lib/underscore.js"></script>
   <script type="text/javascript" src="lib/d3.v3.js"></script>
   <script type="text/javascript" src="lib/cola.js"></script>
-  
+
   <!-- include source files here... -->
   <script type="text/javascript" src="src/Project.js"></script>
   <script type="text/javascript" src="src/graph1.js"></script>
@@ -27,15 +27,21 @@
     .link {
       stroke: #999;
       stroke-width: 3px;
-      stroke-opacity: 1;
+      stroke-opacity: 1
     }
 
     .label {
-        fill: white;
-        font-family: Verdana;
-        font-size: 25px;
-        text-anchor: middle;
-        cursor: move;
+      fill: white;
+      font-family: Verdana;
+      font-size: 25px;
+      text-anchor: middle;
+      cursor: move;
+    }
+    .group {
+      stroke: #fff;
+      stroke-width: 1.5px;
+      cursor: move;
+      opacity: 0.7;
     }
 
   </style>
@@ -53,6 +59,23 @@
     myrep.add_class("reptile");
     myrep.add_class("mutant");
     myrep.add_class("alien");
+    myrep.add_class("b");
+    myrep.add_class("a");
+    myrep.add_class("m");
+    myrep.add_class("d");
+    myrep.add_class("asfhdgjfg");
+    myrep.add_class("z");
+    myrep.add_class("x");
+    myrep.add_class("1");
+    myrep.add_generalization("animal", "asfhdgjfg");
+    myrep.add_generalization("animal", "1");
+    myrep.add_generalization("animal", "z");
+    myrep.add_generalization("animal", "x");
+    myrep.add_generalization("animal", "m");
+    myrep.add_generalization("animal", "a");
+    myrep.add_generalization("animal", "alien");
+    myrep.add_generalization("animal", "b");  
+    myrep.add_generalization("animal", "d");
     myrep.add_generalization("human", "mutant");
     myrep.add_generalization("bird", "mutant");
     myrep.add_generalization("animal", "reptile");
@@ -60,13 +83,25 @@
     myrep.add_generalization("animal", "bird");
     myrep.add_generalization("human", "baby");
     myrep.add_generalization("bird", "egg");
-    m = myrep.get_all_class_names();
+    myrep.add_instance("lol");
+    myrep.add_instance("yolo");
+    myrep.add_instance("wtf");
     var graph = {
-      class: myrep.select_all_classes(),
+      nodes: (myrep.select_all_classes()).concat(myrep.select_all_instances()),
       links: myrep.select_all_generalizations()
     }
-    console.log(myrep.select_all_generalizations());
-    console.log(myrep.select_all_classes());
+    graph.groups = [
+      { leaves:
+          _.chain(graph.nodes)
+            .map(function (node, i) {
+              if(node.type === "class") return i;
+            })
+            .filter(_.isNumber)
+            .value()
+      }
+    ];
+    //console.log(myrep.select_all_classes());
+    console.log(graph);
     visual(cola, graph);
   </script>
 </body>

@@ -198,6 +198,5 @@ describe("Class diagramm", function () {
         myrep.add_class("bird");
         myrep.add_generalization("animal", "human");
         myrep.add_generalization("animal", "bird");
-        console.log(myrep.select_all_classes());
     });
 });

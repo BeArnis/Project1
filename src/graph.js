@@ -1,4 +1,4 @@
-function visual (cola_lib, graph) {
+function visual (cola_lib) {
     var width = 960,
         height = 500;
 
@@ -7,6 +7,7 @@ function visual (cola_lib, graph) {
     var cola = cola_lib.d3adaptor()
         .linkDistance(120)
         .avoidOverlaps(true)
+        .flowLayout()
         .size([width, height]);
 
 
@@ -17,22 +18,30 @@ function visual (cola_lib, graph) {
     graph = {
         "class":[
           {"name":"a","width":60,"height":40},
-          {"name":"b","width":60,"height":40},
-          {"name":"c","width":60,"height":40},
-          {"name":"d","width":60,"height":40},
-          {"name":"e","width":60,"height":40}
+          {"name":"w","width":60,"height":40},
+          {"name":"e","width":60,"height":40},
+          {"name":"t","width":60,"height":40},
+          {"name":"u","width":60,"height":40},
+          {"name":"p","width":60,"height":40},
+          {"name":"h","width":60,"height":40},
+          {"name":"r","width":60,"height":40},
+          {"name":"b","width":60,"height":40}
         ],
         "links":[
           {"source":0,"target":1},
-          {"source":1,"target":2},
-          {"source":2,"target":0},
-          {"source":2,"target":3}
+          {"source":0,"target":2},
+          {"source":0,"target":3},
+          {"source":0,"target":4},
+          {"source":0,"target":5},
+          {"source":0,"target":6},
+          {"source":0,"target":7},
+          {"source":0,"target":8}
         ]
     }
 ;    cola
         .nodes(graph.class)
         .links(graph.links)
-        .start();
+        .start(30, 30, 30);
 
     var link = svg.selectAll(".link")
         .data(graph.links)

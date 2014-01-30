@@ -7,8 +7,8 @@ function rep_init() {
                 name: item,
                 superclass: [],
                 subclass: [],
-                width: 100,
-                height: 50
+                has_instance: [],
+                type: "class"
             };
         },
         exists_class: function (class_name) {
@@ -47,8 +47,11 @@ function rep_init() {
         },
         add_instance: function (instance_name) {
             this.instances[instance_name] = {
+                name: instance_name,
                 link: [],
-                link_to: []
+                link_to: [],
+                instance_of: [],
+                type: "instance"
             };
         },
         delete_instance: function (instance_name) {
@@ -102,22 +105,28 @@ function rep_init() {
             }
         },
         add_instance_of: function (class_name, instance_name) {
-            this.class[class_name]["has_instance"] = instance_name;
-            this.instances[instance_name]["instance_of"] = class_name;
+
+            this.class[class_name]["has_instance"].push(instance_name);
+            this.instances[instance_name]["instance_of"].push(class_name);
+
         },
         delete_instance_of: function (class_name, instance_name) {
-            if((this.class[class_name]["has_instance"] === instance_name) && (this.instances[instance_name]["instance_of"] = class_name)) {
-                delete this.class[class_name]["has_instance"];
-                delete this.instances[instance_name]["instance_of"];
-            }
+
+            delete this.class[class_name]["has_instance"][_.indexOf(this.class[class_name]["has_instance"], instance_name)];
+            delete this.instances[instance_name]["instance_of"][_.indexOf(this.instances[instance_name]["instance_of"], class_name)];
+
         },
         exists_instance_of: function (class_name, instance_name) {
-            if((this.class[class_name]["has_instance"] === instance_name) && (this.instances[instance_name]["instance_of"] = class_name)) {
-                return true;
+
+            if (_.indexOf(this.class[class_name]["has_instance"], instance_name) != -1) {
+                if (_.indexOf(this.instances[instance_name]["instance_of"], class_name) != -1) {
+                    return true;
+                }
             }
-            else return false;
+            return false;
         },
         add_association: function (begin_class, begin_role, begin_kard, end_class, end_role, end_kard) {
+
             this.class[begin_class]["assoc"] = { role: begin_role };
             this.class[begin_class]["assoc"]["kard"] = begin_kard;
             this.class[begin_class]["assoc"]["to_class"] = end_class;
@@ -129,6 +138,7 @@ function rep_init() {
         },
         delete_association: function () {},
         exists_association: function (begin_class, begin_role, begin_kard, end_class, end_role, end_kard) {
+
             if((this.class[begin_class]["assoc"]["role"] === begin_role) && (this.class[begin_class]["assoc"]["kard"] === begin_kard) && (this.class[begin_class]["assoc"]["to_class"] === end_class) &&
                 (this.class[end_class]["assoc"]["role"] === end_role) && (this.class[end_class]["assoc"]["kard"] === end_kard) && (this.class[end_class]["assoc"]["to_class"] === begin_class)) {
                 return true;
@@ -156,16 +166,22 @@ function rep_init() {
                     m.push(key);
                 }
             for(var star in this.class) {
-                for(var end in this.class[star]["superclass"]) {
+                for(var end in this.class[star]["subclass"]) {
                     sub.push({
                         source: _.indexOf(m, star),
-                        target: _.indexOf(m, this.class[star]["superclass"][end])
+                        target: _.indexOf(m, this.class[star]["subclass"][end]),
+                        type: "class"
                     });
-                    console.log(star);
-                    console.log(this.class[star]["superclass"]);
                 }
             }
             return sub;
+        },
+        select_all_instances: function () {
+            var inst = [];
+            for(var key in this.instances) {
+                inst.push(this.instances[key]);
+            }
+            return inst;
         }
     };
     return repository;
