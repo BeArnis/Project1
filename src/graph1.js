@@ -22,14 +22,14 @@ function visual (cola_lib, graph) {
         .nodes(graph.nodes)
         .links(graph.links)
         .groups(graph.groups)
-        .start(10, 10);
+        .start(20, 20);
 
     var group = svg.selectAll(".groups")
         .data(graph.groups)
       .enter().append("rect")
-        .attr("rx", 8).attr("ry", 8)
+        .attr("rx", 18).attr("ry", 18)
         .attr("class", "group")
-        .style("fill", function (d, i) { return color(i); });
+        .style("fill", function (d, i) { return color(i);});
 
 
 
@@ -55,45 +55,87 @@ function visual (cola_lib, graph) {
         .attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
 
 
-    var margin = 6, pad = 12;
+    var margin = 40, pad = 12;
 
 
     var node = svg.selectAll(".node")
             .data(graph.nodes)
-            .enter().append("rect")
-            .attr("class", "node")
-            .attr("rx", 15).attr("ry", 15)
-            .style("fill", function (d) { if(d.type === "instance") {return "red";} else { return "blue";} })
-            .call(cola_a.drag);
+            .enter().append("g")
+            .attr("class", "g")
+            .call(cola_a.drag)
+            .each(function (d) {
+                var g = d3.select(this);
+                var wi = [];
+                var height = 0;
+                var rect = g.append("rect")
+                    .style("fill", "red")
+                    .call(cola_a.drag)
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .attr("rx", 15).attr("ry", 15);
+
+                g.append("text")
+                    .attr("class", "name")
+                    .attr("transform", "translate("+ margin/3 +"," + (20 + margin/3) + ")")
+                    .text(function (d) { return d.name; })
+                    .each(function (d) {
+                        var w = this.getBBox().width;
+                        wi.push(w);
+                        height += this.getBBox().height;
+                    })
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .call(cola_a.drag);
+
+                
+                g.selectAll(".atribute")
+                    .data(d.atribute)
+                    .enter()
+                     .append("text")
+                     .attr("class", "atribute")
+                     .attr("transform", "translate("+ margin/3 +"," + (20 + margin/3) + ")")
+                     .text(function (d) { return d;})
+                     .call(cola_a.drag)
+                    .attr("x", 0)
+                    
+                     .each(function (d) {
+                        var text = d3.select(this);
+                        var w = this.getBBox().width;
+                        var h = this.getBBox().height;
+
+                        text.attr("y", height);
+                        wi.push(w);
+                        height += this.getBBox().height;
+                    });
+
+                
+             
+                //console.log(Math.max.apply(Math, wi));
+                    
+                d.width = Math.max.apply(Math, wi) + margin;
+                d.height = height + margin;
+                //console.log(d.height, "d");
+                rect.attr("height", d.height);
+                rect.attr("width", d.width);
+            });
+            
 
 
 
-    var label = svg.selectAll(".label")
-        .data(graph.nodes)
-       .enter().append("text")
-        .attr("class", "label")
-        .text(function (d) { return d.name; })
-        .call(cola_a.drag)
-        .each(function (d) {
-                    var b = this.getBBox();
-                    var extra = 2 * margin + 2 * pad;
-                    d.width = b.width + extra;
-                    d.height = b.height + extra;
-                });
+    /*node.append("text")
+        .attr("class", "name")
+        .text(function (d) { return d.name; });*/
 
-
-    node.append("title")
-        .text(function (d) { return d.name; });
 
     
 
     cola_a.on("tick", function () {
-        node.each(function (d) { d.innerBounds = d.bounds.inflate(-margin); })
-            .attr("x", function (d) { return d.innerBounds.x; })
-            .attr("y", function (d) { return d.innerBounds.y; })
-            .attr("width", function (d) { return d.innerBounds.width(); })
-            .attr("height", function (d) { return d.innerBounds.height(); });
+        node.each(function (d)
 
+            { d.innerBounds = d.bounds.inflate(0); })
+            .attr("transform", function (d) {
+                return "translate(" + d.innerBounds.x + "," + d.innerBounds.y + " )";
+            });
         group.attr("x", function (d) { return d.bounds.x; })
                  .attr("y", function (d) { return d.bounds.y; })
                 .attr("width", function (d) { return d.bounds.width(); })
@@ -112,9 +154,10 @@ function visual (cola_lib, graph) {
             .attr("x2", function (d) { return d.sourceIntersection.x; })
             .attr("y2", function (d) { return d.sourceIntersection.y; });
 
-        label
+        /*label
             .attr("x", function (d) { return d.x; })
-            .attr("y", function (d) { return d.y + (margin + pad) / 2;});
+            .attr("y", function (d) { return d.y + (margin + pad) / 2;});*/
+
     });
 }
 

@@ -5,6 +5,7 @@ function rep_init() {
         add_class: function (item) {
             this.class[item] = {
                 name: item,
+                atribute: [],
                 superclass: [],
                 subclass: [],
                 has_instance: [],
@@ -18,7 +19,7 @@ function rep_init() {
             delete this.class[class_name];
         },
         add_atribute: function (class_name, atribute) {
-            this.class[class_name][atribute] = {};
+            this.class[class_name]["atribute"].push(atribute);
         },
         exists_atribute: function (class_name, atribute) {
             return atribute in this.class[class_name];
@@ -48,6 +49,7 @@ function rep_init() {
         add_instance: function (instance_name) {
             this.instances[instance_name] = {
                 name: instance_name,
+                atribute: [],
                 link: [],
                 link_to: [],
                 instance_of: [],
@@ -205,7 +207,8 @@ function rep_init() {
                 }
             }
             return inst;
-        }
+        },
+
 
     };
     return repository;

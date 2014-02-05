@@ -60,6 +60,7 @@
 
 <body>
   <script>
+    console.log("abc");
     myrep = rep_init();
     myrep.add_class("animal");
     myrep.add_class("human");
@@ -99,6 +100,9 @@
     myrep.add_instance_of("egg", "lol");
     myrep.add_instance_of("mutant", "yolo");
     myrep.add_instance_of("animal", "wtf");
+    myrep.add_atribute("animal", "Legs");
+    myrep.add_atribute("animal", "Head_something");
+    myrep.add_atribute("animal", "Tail");
     var graph = {
       nodes: (myrep.select_all_classes()).concat(myrep.select_all_instances()),
       links: (myrep.select_all_generalizations()).concat(myrep.select_all_instances_of())
@@ -121,17 +125,16 @@
             .value()
       }
     ];
-    console.log(myrep.select_all_instances_of());
-    console.log(graph);
+    /*graph.constraints = [
+      {"type":"alignment",
+       "axis":"x",
+       "offsets":[
+         {"node":"1", "offset":"0"},
+         {"node":"16", "offset":"0"}
+       ]}
+    ];*/
+    console.log(graph.nodes);
     visual(cola, graph);
-    /*leaves:
-          _.chain(graph.nodes)
-            .map(function (node, i) {
-              if(node.type === "instance") return i;
-            })
-            .filter(_.isNumber)
-            .value()*/
   </script>
 </body>
 </html>
-
