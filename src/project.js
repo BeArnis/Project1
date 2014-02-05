@@ -9,6 +9,7 @@ function rep_init() {
                 superclass: [],
                 subclass: [],
                 has_instance: [],
+                assoc: [],
                 type: "class"
             };
         },
@@ -22,10 +23,13 @@ function rep_init() {
             this.class[class_name]["atribute"].push(atribute);
         },
         exists_atribute: function (class_name, atribute) {
-            return atribute in this.class[class_name];
+            if (_.indexOf(this.class[class_name]["atribute"], atribute) != -1) {
+                return true;
+            }
+            else return false;
         },
         delete_atribute: function (class_name, atribute) {
-            delete this.class[class_name][atribute];
+            delete this.class[class_name]["atribute"][(_.indexOf(this.class[class_name]["atribute"], atribute))];
         },
         add_generalization: function (super_class, sub_class) {
 
@@ -93,18 +97,25 @@ function rep_init() {
         delete this.instances[second_instance]["link_to"][_.indexOf(this.instances[second_instance]["link"], link_name)];
         },
         add_atribute_value: function (instance_name, atribute_name, value) {
-            this.instances[instance_name][atribute_name] = value;
+
+            this.instances[instance_name]["atribute"].push(atribute_name);
+            this.instances[instance_name]["atribute"][atribute_name] = [];
+            this.instances[instance_name]["atribute"][atribute_name].push(value);
         },
         exists_atribute_value: function (instance_name, atribute_name, value) {
-            if(this.instances[instance_name][atribute_name] === value) {
+            /*if(this.instances[instance_name]["atribute"][atribute_name] === value) {
+                return true;
+            }
+            else return false;*/
+            if (_.indexOf(this.instances[instance_name]["atribute"], atribute_name) != -1) {
                 return true;
             }
             else return false;
         },
         delete_atribute_value: function (instance_name, atribute_name, value) {
-            if(this.instances[instance_name][atribute_name] === value) {
-                delete this.instances[instance_name][atribute_name];
-            }
+            
+                delete this.instances[instance_name]["atribute"][(_.indexOf(this.instances[instance_name]["atribute"], atribute_name))];
+            
         },
         add_instance_of: function (class_name, instance_name) {
 
@@ -129,23 +140,56 @@ function rep_init() {
         },
         add_association: function (begin_class, begin_role, begin_kard, end_class, end_role, end_kard) {
 
-            this.class[begin_class]["assoc"] = { role: begin_role };
-            this.class[begin_class]["assoc"]["kard"] = begin_kard;
-            this.class[begin_class]["assoc"]["to_class"] = end_class;
+            this.class[begin_class]["assoc"].push({
+                class_to: end_class,
+                role: begin_role,
+                bkard: begin_kard
+            });
 
-            this.class[end_class]["assoc"] = { role: end_role };
-            this.class[end_class]["assoc"]["kard"] = end_kard;
-            this.class[end_class]["assoc"]["to_class"] = begin_class;
+            this.class[end_class]["assoc"].push({
+                class_to: begin_class,
+                role: end_role,
+                bkard: end_kard
+            });
+        console.log(_.indexOf(this.class[begin_class]["assoc"]));
+
 
         },
-        delete_association: function () {},
+        delete_association: function (begin_class, begin_role, begin_kard, end_class, end_role, end_kard) {
+
+             var assoc1 = _.find(this.class[begin_class]["assoc"], function (assoc) { return assoc.class_to === end_class;});
+
+                this.class[begin_class]["assoc"] = _.without(this.class[begin_class]["assoc"], assoc1);
+
+            var assoc2 = _.find(this.class[end_class]["assoc"], function (assoc) { return assoc.class_to === begin_class;});
+            //console.log(_.without(this.class[begin_class]["assoc"], assoc1));
+                this.class[end_class]["assoc"] = _.without(this.class[end_class]["assoc"], assoc2);
+                //delete this.class[end_class]["assoc"][_.indexOf(this.class[end_class]["assoc"], { class_to: begin_class })];
+            
+        },
         exists_association: function (begin_class, begin_role, begin_kard, end_class, end_role, end_kard) {
 
-            if((this.class[begin_class]["assoc"]["role"] === begin_role) && (this.class[begin_class]["assoc"]["kard"] === begin_kard) && (this.class[begin_class]["assoc"]["to_class"] === end_class) &&
-                (this.class[end_class]["assoc"]["role"] === end_role) && (this.class[end_class]["assoc"]["kard"] === end_kard) && (this.class[end_class]["assoc"]["to_class"] === begin_class)) {
-                return true;
+            var b, e;
+
+            for (var i = 0; i < this.class[begin_class]["assoc"].length; i++) {
+                
+                if(this.class[begin_class]["assoc"][i]["class_to"] === end_class) {
+                    
+                    b = true;
+                }
             }
-            else return false;
+
+            for (var j = 0; j < this.class[end_class]["assoc"].length; j++) {
+        
+                if(this.class[end_class]["assoc"][j]["class_to"] === begin_class) {
+            
+                     e = true;
+                }
+            }
+
+            if(b && e) return true;
+
+            return false;
         },
         select_all_classes: function () {
                 var m = [];

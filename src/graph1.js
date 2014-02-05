@@ -55,8 +55,114 @@ function visual (cola_lib, graph) {
         .attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
 
 
-    var margin = 40, pad = 12;
+    var margin = 70, pad = 12;
 
+
+
+    function render_class (g, d) {
+
+        var wi = [];
+        var height = 0;
+        var rect = g.append("rect")
+            .style("fill", "red")
+            .call(cola_a.drag)
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("rx", 10).attr("ry", 10);
+
+        g.append("text")
+            .attr("class", "name")
+            .attr("transform", "translate("+ margin/2 +"," + (20 + margin/2) + ")")
+            .text(function (d) { return d.name; })
+            .each(function (d) {
+                var w = this.getBBox().width;
+                wi.push(w);
+                height += this.getBBox().height;
+            })
+            .attr("x", 0)
+            .attr("y", 0)
+            .call(cola_a.drag);
+
+        g.selectAll(".atribute")
+            .data(d.atribute)
+            .enter()
+             .append("text")
+             .attr("class", "atribute")
+             .attr("transform", "translate("+ margin/2 +"," + (20 + margin/2) + ")")
+             .text(function (d, i) { return "Atribute" + (i+1) + ": " + d;})
+             .call(cola_a.drag)
+            .attr("x", 0)
+             .each(function (d) {
+                var text = d3.select(this);
+                var w = this.getBBox().width;
+                var h = this.getBBox().height;
+
+                text.attr("y", height);
+                wi.push(w);
+                height += this.getBBox().height;
+            });
+            d.width = Math.max.apply(Math, wi) + margin;
+            d.height = height + margin;
+            rect.attr("height", d.height);
+            rect.attr("width", d.width);
+    }
+    
+    function render_instance (g, d) {
+        var wi = [];
+        var height = 0;
+        var rect = g.append("rect")
+            .style("fill", "orange")
+            .call(cola_a.drag)
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("rx", 10).attr("ry", 10);
+
+        g.append("text")
+            .attr("class", "name")
+            .attr("transform", "translate("+ margin/2 +"," + (20 + margin/2) + ")")
+            .text(function (d) { return d.name; })
+            .each(function (d) {
+                var w = this.getBBox().width;
+                wi.push(w);
+                height += this.getBBox().height;
+            })
+            .attr("x", 0)
+            .attr("y", 0)
+            .call(cola_a.drag);
+            console.log(d);
+
+        var deep_atr = d.atribute;
+        g.selectAll(".atribute")
+            .data(deep_atr)
+            .enter()
+             .append("text")
+             .attr("class", "atribute")
+             .attr("transform", "translate("+ margin/2 +"," + (20 + margin/2) + ")")
+             .text(function (d) {
+                return d + ": " + deep_atr[d];})
+             .call(cola_a.drag)
+            .attr("x", 0)
+             .each(function (d) {
+                var text = d3.select(this);
+                var w = this.getBBox().width;
+                var h = this.getBBox().height;
+
+                text.attr("y", height);
+                wi.push(w);
+                height += this.getBBox().height;
+            });
+            d.width = Math.max.apply(Math, wi) + margin;
+            d.height = height + margin;
+            rect.attr("height", d.height);
+            rect.attr("width", d.width);
+    
+            d.width = Math.max.apply(Math, wi) + margin;
+            d.height = height + margin;
+            rect.attr("height", d.height);
+            rect.attr("width", d.width);
+
+            console.log(d["atribute"][d["atribute"][1]]);
+    }
 
     var node = svg.selectAll(".node")
             .data(graph.nodes)
@@ -64,67 +170,20 @@ function visual (cola_lib, graph) {
             .attr("class", "g")
             .call(cola_a.drag)
             .each(function (d) {
+                
                 var g = d3.select(this);
-                var wi = [];
-                var height = 0;
-                var rect = g.append("rect")
-                    .style("fill", "red")
-                    .call(cola_a.drag)
-                    .attr("x", 0)
-                    .attr("y", 0)
-                    .attr("rx", 15).attr("ry", 15);
-
-                g.append("text")
-                    .attr("class", "name")
-                    .attr("transform", "translate("+ margin/3 +"," + (20 + margin/3) + ")")
-                    .text(function (d) { return d.name; })
-                    .each(function (d) {
-                        var w = this.getBBox().width;
-                        wi.push(w);
-                        height += this.getBBox().height;
-                    })
-                    .attr("x", 0)
-                    .attr("y", 0)
-                    .call(cola_a.drag);
-
                 
-                g.selectAll(".atribute")
-                    .data(d.atribute)
-                    .enter()
-                     .append("text")
-                     .attr("class", "atribute")
-                     .attr("transform", "translate("+ margin/3 +"," + (20 + margin/3) + ")")
-                     .text(function (d) { return d;})
-                     .call(cola_a.drag)
-                    .attr("x", 0)
+                if(d.type === "class") {
+                    render_class(g, d);
+                }
+                else render_instance(g, d);
                     
-                     .each(function (d) {
-                        var text = d3.select(this);
-                        var w = this.getBBox().width;
-                        var h = this.getBBox().height;
-
-                        text.attr("y", height);
-                        wi.push(w);
-                        height += this.getBBox().height;
-                    });
-
-                
-             
-                //console.log(Math.max.apply(Math, wi));
-                    
-                d.width = Math.max.apply(Math, wi) + margin;
-                d.height = height + margin;
-                //console.log(d.height, "d");
-                rect.attr("height", d.height);
-                rect.attr("width", d.width);
             });
             
 
 
 
-    /*node.append("text")
-        .attr("class", "name")
-        .text(function (d) { return d.name; });*/
+
 
 
     
@@ -160,4 +219,3 @@ function visual (cola_lib, graph) {
 
     });
 }
-

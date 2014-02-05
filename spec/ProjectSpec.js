@@ -190,7 +190,15 @@ describe("Class diagramm", function () {
         myrep.add_class("building");
         myrep.add_class("land");
         myrep.add_association("building", "2", "3", "land", "5", "6");
+
         expect(myrep.exists_association("building", "2", "3", "land", "5", "6")).toEqual(true);
+    });
+    it(" should return false if association is added between two classes and deleted and checked if it is there", function () {
+        myrep.add_class("building");
+        myrep.add_class("land");
+        myrep.add_association("building", "2", "3", "land", "5", "6");
+        myrep.delete_association("building", "2", "3", "land", "5", "6");
+        expect(myrep.exists_association("building", "2", "3", "land", "5", "6")).toEqual(false);
     });
     it(" should return true if we add two generalization and then check if they both exist", function () {
         myrep.add_class("animal");

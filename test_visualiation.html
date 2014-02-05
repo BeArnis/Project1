@@ -30,7 +30,9 @@
       stroke-opacity: 1;
 
     }
-
+    .name {
+      font-size: 25px;
+    }
     #instance {
       fill: orange;
     }
@@ -60,7 +62,6 @@
 
 <body>
   <script>
-    console.log("abc");
     myrep = rep_init();
     myrep.add_class("animal");
     myrep.add_class("human");
@@ -70,7 +71,7 @@
     myrep.add_class("reptile");
     myrep.add_class("mutant");
     myrep.add_class("alien");
-    myrep.add_class("b");
+    myrep.add_class("B");
     myrep.add_class("a");
     myrep.add_class("m");
     myrep.add_class("d");
@@ -85,7 +86,7 @@
     myrep.add_generalization("animal", "m");
     myrep.add_generalization("animal", "a");
     myrep.add_generalization("animal", "alien");
-    myrep.add_generalization("animal", "b");  
+    myrep.add_generalization("animal", "B");  
     myrep.add_generalization("animal", "d");
     myrep.add_generalization("human", "mutant");
     myrep.add_generalization("bird", "mutant");
@@ -103,6 +104,9 @@
     myrep.add_atribute("animal", "Legs");
     myrep.add_atribute("animal", "Head_something");
     myrep.add_atribute("animal", "Tail");
+    myrep.add_atribute_value("lol", "ah", "1");
+    myrep.add_atribute_value("lol", "beh", "2");
+    myrep.add_atribute_value("lol", "meh", "asldjg");
     var graph = {
       nodes: (myrep.select_all_classes()).concat(myrep.select_all_instances()),
       links: (myrep.select_all_generalizations()).concat(myrep.select_all_instances_of())
@@ -133,7 +137,7 @@
          {"node":"16", "offset":"0"}
        ]}
     ];*/
-    console.log(graph.nodes);
+    //console.log(graph.nodes);
     visual(cola, graph);
   </script>
 </body>
