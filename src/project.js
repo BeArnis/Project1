@@ -151,21 +151,19 @@ function rep_init() {
                 role: end_role,
                 bkard: end_kard
             });
-        console.log(_.indexOf(this.class[begin_class]["assoc"]));
+
 
 
         },
         delete_association: function (begin_class, begin_role, begin_kard, end_class, end_role, end_kard) {
 
-             var assoc1 = _.find(this.class[begin_class]["assoc"], function (assoc) { return assoc.class_to === end_class;});
+            var assoc1 = _.find(this.class[begin_class]["assoc"], function (assoc) { return assoc.class_to === end_class;});
 
                 this.class[begin_class]["assoc"] = _.without(this.class[begin_class]["assoc"], assoc1);
 
             var assoc2 = _.find(this.class[end_class]["assoc"], function (assoc) { return assoc.class_to === begin_class;});
-            //console.log(_.without(this.class[begin_class]["assoc"], assoc1));
-                this.class[end_class]["assoc"] = _.without(this.class[end_class]["assoc"], assoc2);
-                //delete this.class[end_class]["assoc"][_.indexOf(this.class[end_class]["assoc"], { class_to: begin_class })];
             
+                this.class[end_class]["assoc"] = _.without(this.class[end_class]["assoc"], assoc2);
         },
         exists_association: function (begin_class, begin_role, begin_kard, end_class, end_role, end_kard) {
 
@@ -252,7 +250,35 @@ function rep_init() {
             }
             return inst;
         },
+        select_all_assoc: function () {
 
+            var m = [];
+            for(var cl in this.class) {
+                    m.push(cl);
+                }
+
+            var assoc_arr = [];
+            for(var key in this.class) {
+
+
+                var a = _.find(this.class[key]["assoc"], function (assocc) { return assocc.class_to;});
+                
+                for(var assocs in this.class[key]["assoc"]) {
+
+
+ 
+
+                    assoc_arr.push({
+                        source: _.indexOf(m, key),
+                        target: _.indexOf(m, a.class_to),
+                        assoc: a,
+                        type: "association"
+                    });
+                    
+                }
+            }
+        return assoc_arr;
+        }
 
     };
     return repository;

@@ -50,13 +50,43 @@ function visual (cola_lib, graph) {
 
     var link = svg.selectAll(".link")
         .data(graph.links)
-      .enter().append("line")
-        .attr("class", function(d) { return "link " + d.type; })
-        .attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
+        .enter().append("g")
+            .attr("class", "g_links")
+            .call(cola_a.drag)
+            .each( function (d) {
+                var m = d3.select(this);
+                var id;
+                var line = m.append("line")
+                        .attr("id", function (d) {
+                            if(d.type === "association") {
+                                id = d.assoc["role"];
+                                return d.assoc["role"];
+                            }
+                        })
+                        .attr("class", function(d) { return "link " + d.type; })
+                        .attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
+                line.append("text")
+                    .attr("class", "")
+                    .attr("xlink:href", "#" + id + "")
+                    .attr("startoffset", "50%")
+                    .text(function (d) {
+                        return "this is a line";
+                    });
 
 
-    var margin = 70, pad = 12;
+            });
+      
 
+    /*var assoc_lable = svg.selectAll(".link")
+            .data(graph.links)
+            .enter().append("text")
+             .attr("class", "aso")
+             .each( function (d) {
+                 assoc_text = d3.select(this);
+             });*/
+
+
+    var margin = 50, pad = 12;
 
 
     function render_class (g, d) {
@@ -129,7 +159,7 @@ function visual (cola_lib, graph) {
             .attr("x", 0)
             .attr("y", 0)
             .call(cola_a.drag);
-            console.log(d);
+
 
         var deep_atr = d.atribute;
         g.selectAll(".atribute")
@@ -155,13 +185,6 @@ function visual (cola_lib, graph) {
             d.height = height + margin;
             rect.attr("height", d.height);
             rect.attr("width", d.width);
-    
-            d.width = Math.max.apply(Math, wi) + margin;
-            d.height = height + margin;
-            rect.attr("height", d.height);
-            rect.attr("width", d.width);
-
-            console.log(d["atribute"][d["atribute"][1]]);
     }
 
     var node = svg.selectAll(".node")
@@ -179,14 +202,7 @@ function visual (cola_lib, graph) {
                 else render_instance(g, d);
                     
             });
-            
-
-
-
-
-
-
-    
+              
 
     cola_a.on("tick", function () {
         node.each(function (d)
@@ -200,7 +216,10 @@ function visual (cola_lib, graph) {
                 .attr("width", function (d) { return d.bounds.width(); })
                 .attr("height", function (d) { return d.bounds.height(); });
 
-        link.each(function (d) {
+       
+
+        link.selectAll(".link")
+        .each(function (d) {
             if (d.source === d.target) {
                     d.sourceIntersection = { x: d.source.x, y: d.source.y };
                     d.arrowStart = { x: d.target.x, y: d.target.y };
@@ -212,10 +231,5 @@ function visual (cola_lib, graph) {
             .attr("y1", function (d) { return d.arrowStart.y; })
             .attr("x2", function (d) { return d.sourceIntersection.x; })
             .attr("y2", function (d) { return d.sourceIntersection.y; });
-
-        /*label
-            .attr("x", function (d) { return d.x; })
-            .attr("y", function (d) { return d.y + (margin + pad) / 2;});*/
-
     });
 }
