@@ -143,13 +143,13 @@ function rep_init() {
             this.class[begin_class]["assoc"].push({
                 class_to: end_class,
                 role: begin_role,
-                bkard: begin_kard
+                kard: begin_kard
             });
 
             this.class[end_class]["assoc"].push({
                 class_to: begin_class,
                 role: end_role,
-                bkard: end_kard
+                kard: end_kard
             });
 
 

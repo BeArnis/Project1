@@ -22,7 +22,7 @@ function visual (cola_lib, graph) {
         .nodes(graph.nodes)
         .links(graph.links)
         .groups(graph.groups)
-        .start(20, 20);
+        .start(1, 1);
 
     var group = svg.selectAll(".groups")
         .data(graph.groups)
@@ -57,11 +57,11 @@ function visual (cola_lib, graph) {
                 var m = d3.select(this);
                 //console.log(d);
                 var id;
-                var line = m.append("line")
+                var path = m.append("path")
                         .attr("id", function (d) {
                             if(d.type === "association") {
-                                id = d.assoc["role"];
-                                return d.assoc["role"];
+                                id = "asd" + d.assoc["role"];
+                                return id;
                             }
                         })
                         .attr("class", function(d) { return "link " + d.type; })
@@ -69,34 +69,66 @@ function visual (cola_lib, graph) {
 
 
                 m.append("text")
+                    .attr("dy", -5)
+                    .attr("style", "text-anchor:middle; font: 16px sans-serif;")
+                    
                     .each(function (d) {
                         s = d3.select(this);
 
 
-                        s.append("textline")
+                        s.append("textPath")
                         .attr("class", "path_id")
+                        .attr("dy", +15)
                         .attr("xlink:href", function (d) {
                             if(d.type === "association") {
                                 return "#" + id;
                             }
                         })
-                        .attr("startoffset", "50%")
+                        .attr("startOffset", "15%")
                         .text(function (d) {
-                            return "this is a line";
+                            if(d.type === "association") {
+                                console.log(d.assoc.role);
+                                return d.assoc.role;
+                            }
                         });
+
+                       
+                    });
+
+                m.append("text")
+                    .attr("dy", +25)
+                    .attr("class", "rota")
+                    .attr("transform", function(d) {
+                        return "rotate("+ d.x + " " + d.y + ",180)";
+                    })
+                    .attr("style", "text-anchor:middle; font: 16px sans-serif;")
+                    
+                    .each(function (d) {
+                        s = d3.select(this);
+
+
+                        s.append("textPath")
+                        .attr("class", "path_id")
+                        .attr("dy", +15)
+                        
+                        .attr("xlink:href", function (d) {
+                            if(d.type === "association") {
+                                return "#" + id;
+                            }
+                        })
+                        .attr("startOffset", "15%")
+                        .text(function (d) {
+                            if(d.type === "association") {
+                                console.log(d.assoc.role);
+                                return d.assoc.kard;
+                            }
+                        });
+
+                       
                     });
         
             });
       
-
-    /*var assoc_lable = svg.selectAll(".link")
-            .data(graph.links)
-            .enter().append("text")
-             .attr("class", "aso")
-             .each( function (d) {
-                 assoc_text = d3.select(this);
-             });*/
-
 
     var margin = 50, pad = 12;
 
@@ -230,7 +262,7 @@ function visual (cola_lib, graph) {
 
        
 
-        link.selectAll(".link")
+        /*link.selectAll(".link")
         .each(function (d) {
             if (d.source === d.target) {
                     d.sourceIntersection = { x: d.source.x, y: d.source.y };
@@ -242,6 +274,27 @@ function visual (cola_lib, graph) {
             .attr("x1", function (d) { return d.arrowStart.x; })
             .attr("y1", function (d) { return d.arrowStart.y; })
             .attr("x2", function (d) { return d.sourceIntersection.x; })
-            .attr("y2", function (d) { return d.sourceIntersection.y; });
+            .attr("y2", function (d) { return d.sourceIntersection.y; });*/
+
+        link.selectAll(".link").attr("d", function (d) {
+            var deltaX = d.target.x - d.source.x,
+                deltaY = d.target.y - d.source.y,
+                dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
+                normX = deltaX / dist,
+                normY = deltaY / dist,
+                sourceX = d.source.x,
+                sourceY = d.source.y,
+                targetX = d.target.x,
+                targetY = d.target.y;
+            return 'M' + targetX + ',' + targetY + 'L' + sourceX + ',' + sourceY;
+            });
+        /*link.selectAll(".rota")
+
+            .attr("transform", function (d) {
+                var targetX = d.target.x,
+                    targetY = d.target.y;
+                return "rotate(" + targetX + " " + targetY + ", 2)";
+            });*/
+
     });
 }
