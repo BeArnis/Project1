@@ -44,7 +44,13 @@
       stroke: orange;
       stroke-dasharray: 7 12;
     }
-
+    .path_id {
+      fill: white;
+      font-family: Verdana;
+      font-size: 25px;
+      text-anchor: middle;
+      cursor: move;
+    }
     .label {
       fill: white;
       font-family: Verdana;
@@ -110,7 +116,7 @@
     myrep.add_atribute_value("lol", "ah", "1");
     myrep.add_atribute_value("lol", "beh", "2");
     myrep.add_atribute_value("lol", "meh", "asldjg");
-    myrep.add_association("egg", "2", "3", "d", "5", "6");
+    myrep.add_association("egg", "asd", "3", "d", "5", "6");
     var lin = (myrep.select_all_generalizations()).concat(myrep.select_all_instances_of());
     var lin2 = lin.concat(myrep.select_all_assoc());
     var graph = {
@@ -135,14 +141,7 @@
             .value()
       }
     ];
-    /*graph.constraints = [
-      {"type":"alignment",
-       "axis":"x",
-       "offsets":[
-         {"node":"1", "offset":"0"},
-         {"node":"16", "offset":"0"}
-       ]}
-    ];*/
+
     visual(cola, graph);
   </script>
 </body>

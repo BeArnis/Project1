@@ -55,6 +55,7 @@ function visual (cola_lib, graph) {
             .call(cola_a.drag)
             .each( function (d) {
                 var m = d3.select(this);
+                //console.log(d);
                 var id;
                 var line = m.append("line")
                         .attr("id", function (d) {
@@ -65,15 +66,26 @@ function visual (cola_lib, graph) {
                         })
                         .attr("class", function(d) { return "link " + d.type; })
                         .attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
-                line.append("text")
-                    .attr("class", "")
-                    .attr("xlink:href", "#" + id + "")
-                    .attr("startoffset", "50%")
-                    .text(function (d) {
-                        return "this is a line";
+
+
+                m.append("text")
+                    .each(function (d) {
+                        s = d3.select(this);
+
+
+                        s.append("textline")
+                        .attr("class", "path_id")
+                        .attr("xlink:href", function (d) {
+                            if(d.type === "association") {
+                                return "#" + id;
+                            }
+                        })
+                        .attr("startoffset", "50%")
+                        .text(function (d) {
+                            return "this is a line";
+                        });
                     });
-
-
+        
             });
       
 
