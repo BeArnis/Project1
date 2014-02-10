@@ -73,7 +73,7 @@ function rep_init() {
 
     
             this.instances[second_instance]["link"].push(link_name);
-            this.instances[second_instance]["link_to"].push(second_instance);
+            this.instances[second_instance]["link_to"].push(first_instance);
 
         },
         exists_link: function (first_instance, link_name, second_instance) {
@@ -103,10 +103,7 @@ function rep_init() {
             this.instances[instance_name]["atribute"][atribute_name].push(value);
         },
         exists_atribute_value: function (instance_name, atribute_name, value) {
-            /*if(this.instances[instance_name]["atribute"][atribute_name] === value) {
-                return true;
-            }
-            else return false;*/
+
             if (_.indexOf(this.instances[instance_name]["atribute"], atribute_name) != -1) {
                 return true;
             }
@@ -278,6 +275,36 @@ function rep_init() {
                 }
             }
         return assoc_arr;
+        },
+        select_all_links: function () {
+
+            var link = [];
+            var m = [];
+            for(var cl in this.instances) {
+                    m.push(cl);
+                }
+            var k = [];
+            for(var am in this.class) {
+                    k.push(am);
+                }
+            for(var key in this.instances) {
+
+                var link_name = this.instances[key]["link"];
+                var link_t = _.find(this.instances[key]["link_to"], function (link_to) { return link_to;});
+
+                if( _.indexOf(m, link_t) != -1) {
+
+                    link.push({
+                    source: k.length + _.indexOf(m, key),
+                    target: k.length + _.indexOf(m, link_t),
+                    type: "inst_link",
+                    name: link_name
+
+                    });
+                }
+
+            }
+        return link;
         }
 
     };

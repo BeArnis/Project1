@@ -55,12 +55,15 @@ function visual (cola_lib, graph) {
             .call(cola_a.drag)
             .each( function (d) {
                 var m = d3.select(this);
-                //console.log(d);
                 var id;
                 var path = m.append("path")
                         .attr("id", function (d) {
                             if(d.type === "association") {
                                 id = "asd" + d.assoc["role"];
+                                return id;
+                            }
+                            if(d.type === "inst_link") {
+                                id = "a";
                                 return id;
                             }
                         })
@@ -83,12 +86,20 @@ function visual (cola_lib, graph) {
                             if(d.type === "association") {
                                 return "#" + id;
                             }
+                            if(d.type === "inst_link") {
+
+                                return "#" + id;
+                            }
+
                         })
                         .attr("startOffset", "15%")
                         .text(function (d) {
                             if(d.type === "association") {
-                                console.log(d.assoc.role);
                                 return d.assoc.role;
+                            }
+                            if(d.type === "inst_link") {
+
+                                return d.name;
                             }
                         });
 
@@ -115,17 +126,26 @@ function visual (cola_lib, graph) {
                             if(d.type === "association") {
                                 return "#" + id;
                             }
+                            if(d.type === "inst_link") {
+
+                                return "#" + id;
+                            }
+
                         })
                         .attr("startOffset", "15%")
                         .text(function (d) {
                             if(d.type === "association") {
-                                console.log(d.assoc.role);
                                 return d.assoc.kard;
+                            }
+                            if(d.type === "inst_link") {
+
+                                return d.name;
                             }
                         });
 
                        
                     });
+
         
             });
       
@@ -276,7 +296,17 @@ function visual (cola_lib, graph) {
             .attr("x2", function (d) { return d.sourceIntersection.x; })
             .attr("y2", function (d) { return d.sourceIntersection.y; });*/
 
-        link.selectAll(".link").attr("d", function (d) {
+        link.selectAll(".link")
+        .each(function (d) {
+            if (d.source === d.target) {
+                    d.sourceIntersection = { x: d.source.x, y: d.source.y };
+                    d.arrowStart = { x: d.target.x, y: d.target.y };
+                    return;
+                }
+                vpsc.makeEdgeBetween(d, d.source.innerBounds, d.target.innerBounds, -2);
+            })
+
+        .attr("d", function (d) {
             var deltaX = d.target.x - d.source.x,
                 deltaY = d.target.y - d.source.y,
                 dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
