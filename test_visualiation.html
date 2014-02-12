@@ -1,20 +1,20 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
   <title>Jasmine Spec Runner v2.0.0</title>
 
-  <link rel="shortcut icon" type="image/png" href="lib/jasmine-2.0.0/jasmine_favicon.png">
-  <link rel="stylesheet" type="text/css" href="lib/jasmine-2.0.0/jasmine.css">
+  <link rel='shortcut icon' type='image/png' href='lib/jasmine-2.0.0/jasmine_favicon.png'>
+  <link rel='stylesheet' type='text/css' href='lib/jasmine-2.0.0/jasmine.css'>
 
 
-  <script type="text/javascript" src="lib/underscore.js"></script>
-  <script type="text/javascript" src="lib/d3.v3.js"></script>
-  <script type="text/javascript" src="lib/cola.js"></script>
+  <script type='text/javascript' src='lib/underscore.js'></script>
+  <script type='text/javascript' src='lib/d3.v3.js'></script>
+  <script type='text/javascript' src='lib/cola.js'></script>
 
   <!-- include source files here... -->
-  <script type="text/javascript" src="src/Project.js"></script>
-  <script type="text/javascript" src="src/graph1.js"></script>
+  <script type='text/javascript' src='src/Project.js'></script>
+  <script type='text/javascript' src='src/graph1.js'></script>
   <!-- include spec files here... -->
   <style>
 
@@ -24,7 +24,18 @@
         cursor: move;
     }
 
-    .link {
+    .link.generalization {
+      stroke: #999;
+      stroke-width: 6px;
+      stroke-opacity: 1;
+
+    }
+    .link.instance {
+      stroke: #999;
+      stroke-width: 6px;
+      stroke-opacity: 1;
+    }
+    .inst_link {
       stroke: #999;
       stroke-width: 6px;
       stroke-opacity: 1;
@@ -36,15 +47,15 @@
     #instance {
       fill: orange;
     }
-    .link.association {
-      stroke: green;
-    }
 
     .link.instance {
       stroke: orange;
       stroke-dasharray: 7 12;
     }
-    .path_id {
+
+    .association_path {
+      stroke-width: 6px;
+      stroke: green;
       fill: white;
       font-family: Verdana;
       font-size: 25px;
@@ -72,79 +83,83 @@
 <body>
   <script>
     myrep = rep_init();
-    myrep.add_class("animal");
-    myrep.add_class("human");
-    myrep.add_class("bird");
-    myrep.add_class("egg");
-    myrep.add_class("baby");
-    myrep.add_class("reptile");
-    myrep.add_class("mutant");
-    myrep.add_class("alien");
-    myrep.add_class("B");
-    myrep.add_class("a");
-    myrep.add_class("m");
-    myrep.add_class("d");
-    myrep.add_class("asfhdgjfg");
-    myrep.add_class("z");
-    myrep.add_class("x");
-    myrep.add_class("1");
-    myrep.add_generalization("animal", "asfhdgjfg");
-    myrep.add_generalization("animal", "1");
-    myrep.add_generalization("animal", "z");
-    myrep.add_generalization("animal", "x");
-    myrep.add_generalization("animal", "m");
-    myrep.add_generalization("animal", "a");
-    myrep.add_generalization("animal", "alien");
-    myrep.add_generalization("animal", "B");  
-    myrep.add_generalization("animal", "d");
-    myrep.add_generalization("human", "mutant");
-    myrep.add_generalization("bird", "mutant");
-    myrep.add_generalization("animal", "reptile");
-    myrep.add_generalization("animal", "human");
-    myrep.add_generalization("animal", "bird");
-    myrep.add_generalization("human", "baby");
-    myrep.add_generalization("bird", "egg");
-    myrep.add_instance("lol");
-    myrep.add_instance("yolo");
-    myrep.add_instance("wtf");
-    myrep.add_link("lol", "hohoho", "yolo");
-    myrep.add_instance_of("egg", "lol");
-    myrep.add_instance_of("mutant", "yolo");
-    myrep.add_instance_of("animal", "wtf");
-    myrep.add_atribute("animal", "Legs");
-    myrep.add_atribute("animal", "Head_something");
-    myrep.add_atribute("animal", "Tail");
-    myrep.add_atribute_value("lol", "ah", "1");
-    myrep.add_atribute_value("lol", "beh", "2");
-    myrep.add_atribute_value("lol", "meh", "asldjg");
-    myrep.add_association("egg", "asd", "3", "d", "5", "6");
-    var lin = (myrep.select_all_generalizations()).concat(myrep.select_all_instances_of());
+    myrep.add_class('animal');
+    myrep.add_class('human');
+    myrep.add_class('bird');
+    myrep.add_class('egg');
+    myrep.add_class('baby');
+    myrep.add_class('reptile');
+    myrep.add_class('mutant');
+    myrep.add_class('alien');
+    myrep.add_class('B');
+    myrep.add_class('a');
+    myrep.add_class('m');
+    myrep.add_class('d');
+    myrep.add_class('asfhdgjfg');
+    myrep.add_class('z');
+    myrep.add_class('x');
+    myrep.add_class('1');
+    myrep.add_class('A');
+    myrep.add_generalization('animal', 'asfhdgjfg');
+    myrep.add_generalization('animal', '1');
+    myrep.add_generalization('animal', 'z');
+    myrep.add_generalization('animal', 'x');
+    myrep.add_generalization('animal', 'm');
+    myrep.add_generalization('animal', 'a');
+    myrep.add_generalization('animal', 'alien');
+    myrep.add_generalization('animal', 'B');
+    myrep.add_generalization('animal', 'd');
+    myrep.add_generalization('human', 'mutant');
+    myrep.add_generalization('bird', 'mutant');
+    myrep.add_generalization('animal', 'reptile');
+    myrep.add_generalization('animal', 'human');
+    myrep.add_generalization('animal', 'bird');
+    myrep.add_generalization('human', 'baby');
+    myrep.add_generalization('bird', 'egg');
+    myrep.add_instance('lol');
+    myrep.add_instance('yolo');
+    myrep.add_instance('wtf');
+    myrep.add_link('lol', 'hohoho', 'yolo');
+    myrep.add_instance_of('egg', 'lol');
+    myrep.add_instance_of('mutant', 'yolo');
+    myrep.add_instance_of('animal', 'wtf');
+    myrep.add_atribute('animal', 'Legs');
+    myrep.add_atribute('animal', 'Head_something');
+    myrep.add_atribute('animal', 'Tail');
+    myrep.add_atribute_value('lol', 'ah', '1');
+    myrep.add_atribute_value('lol', 'beh', '2');
+    myrep.add_atribute_value('lol', 'meh', 'asldjg');
+    myrep.add_association('egg', 'white', '3', 'd', '5', '6');
+    myrep.add_association('A', 'b', '1', 'B', 'a', '2');
+    var lin = (myrep.select_all_generalizations())
+      .concat(myrep.select_all_instances_of());
     var lin2 = lin.concat(myrep.select_all_assoc());
     var lin3 = lin2.concat(myrep.select_all_links());
     var graph = {
       nodes: (myrep.select_all_classes()).concat(myrep.select_all_instances()),
-      links: lin3
-    }
-    graph.groups = [
+      links: lin3,
+      groups: null
+    };
+
+    graph['groups'] = [
       { leaves:
           _.chain(graph.nodes)
-            .map(function (node, i) {
-              if(node.type === "class") return i;
+            .map(function(node, i) {
+              if (node.type === 'class') return i;
             })
             .filter(_.isNumber)
             .value()
       },
       { leaves:
           _.chain(graph.nodes)
-            .map(function (node, i) {
-              if(node.type === "instance") return i;
+            .map(function(node, i) {
+              if (node.type === 'instance') return i;
             })
             .filter(_.isNumber)
             .value()
       }
     ];
-    console.log(myrep.select_all_links())
     visual(cola, graph);
-  </script>
+</script>
 </body>
 </html>
