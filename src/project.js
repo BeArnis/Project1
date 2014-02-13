@@ -12,6 +12,8 @@ function rep_init() {
                 subclass: [],
                 has_instance: [],
                 assoc: [],
+                superclass: [],
+                subclass: [],
                 type: 'class'
             };
         },
@@ -20,6 +22,9 @@ function rep_init() {
         },
         delete_class: function(class_name) {
             delete this.class[class_name];
+        },
+        get_class: function(class_name) {
+            return this.class[class_name];
         },
         add_atribute: function(class_name, atribute) {
             this.class[class_name]['atribute'].push(atribute);
@@ -39,7 +44,7 @@ function rep_init() {
             this.class[super_class]['subclass'].push(sub_class);
             this.class[sub_class]['superclass'].push(super_class);
         },
-        generalization_of: function(super_class, sub_class) {
+        exists_generalization_of: function(super_class, sub_class) {
 
             if (_.indexOf(this.class[super_class]['subclass'],
             sub_class) != -1) {
@@ -47,7 +52,7 @@ function rep_init() {
                 super_class) != -1) {
                     return true;
                 }
-                                                                }
+            }
             return false;
         },
         delete_generalization: function(super_class, sub_class) {
@@ -332,7 +337,7 @@ function rep_init() {
 
                 }
 
-            
+
             return sassoc_arr;
         },
         select_all_links: function() {
@@ -348,7 +353,6 @@ function rep_init() {
                 }
 
             for (var link in this.link) {
-                console.log(this.link[link]);
                 var obj = this.link[link];
                 links.push({
                     source: k.length + _.indexOf(m, obj.instance1),
@@ -359,29 +363,42 @@ function rep_init() {
                 });
             }
 
-
-            /*for (var key in this.instances) {
-
-                var link_name = this.instances[key]['link'];
-                var link_t = _.find(this.instances[key][
-                    'link_to'], function(link_to) { return link_to;});
-
-                if (_.indexOf(m, link_t) != -1) {
-
-                    link.push({
-                    source: k.length + _.indexOf(m, key),
-                    target: k.length + _.indexOf(m, link_t),
-                    type: 'inst_link',
-                    name: link_name
-
-                    });
-                }
-
-            }*/
-            console.log(k.length + _.indexOf(m, obj.instance2));
             return links;
-        }
+        },
+        get_class_kard: function() {
+            var role = [];
+            _.filter(this.association, function(kard) {
+                var id1 = kard.end.class_to;
+                var id2 = kard.start.class_to;
+                role[id1] = kard.start.role;
+                role[id2] = kard.end.role;
+                console.log(role);
+            });
 
+            return role;
+        },
+        get_super_class: function(class_name, s) {
+
+            //console.log(s);
+            if (s === undefined) {
+                var s = [];
+            }
+            var a;
+            if (this.class[class_name]['superclass'].length == 0) {
+                return '*';
+            }
+            _.filter(this.class[class_name][
+                'superclass'], function(sup_cl) {
+                    a = sup_cl;
+                return sup_cl;
+            });
+
+            s.push(this.class[a]);
+            //s[a] = this.class[a];
+            //console.log(s);
+            var cl = this.get_super_class(a, s);
+            return s;
+        }
     };
     return repository;
 }

@@ -138,7 +138,8 @@ function visual(cola_lib, graph) {
 
         g.classed('instance_link', true);
         g.append('text')
-            .attr('style', 'text-anchor:middle; font: 26px sans-serif; fill: blue;')
+            .attr('style',
+            'text-anchor:middle; font: 26px sans-serif; fill: blue;')
           .append('textPath')
             .attr('class', 'instance_link')
             .attr('xlink:href', '#a')
@@ -371,9 +372,4 @@ function visual(cola_lib, graph) {
         return 'M' + start.x + ',' + start.y + 'L' + end.x + ',' + end.y;
     }
 
-    /*function tick() {
-          textPath.attr('d', function(d) {
-          return arcPath(d.source.x < d.target.x, d);
-        });
-    }*/
 }

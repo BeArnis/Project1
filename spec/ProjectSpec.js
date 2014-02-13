@@ -31,7 +31,7 @@ describe('Class diagramm', function() {
         expect(typeof (myrep.add_generalization)).toEqual('function');
     });
     it(' should have a method that tells us if class1 has a generalization with class2', function() {
-        expect(typeof (myrep.generalization_of)).toEqual('function');
+        expect(typeof (myrep.exists_generalization_of)).toEqual('function');
     });
     it(' should have a method that deletes a generalization', function() {
         expect(typeof (myrep.delete_generalization)).toEqual('function');
@@ -114,14 +114,14 @@ describe('Class diagramm', function() {
         myrep.add_class('animal');
         myrep.add_class('human');
         myrep.add_generalization('animal', 'human');
-        expect(myrep.generalization_of('animal', 'human')).toEqual(true);
+        expect(myrep.exists_generalization_of('animal', 'human')).toEqual(true);
     });
     it(' should return false if we add a generalization, delete it and then check it', function() {
         myrep.add_class('animal');
         myrep.add_class('human');
         myrep.add_generalization('animal', 'human');
         myrep.delete_generalization('animal', 'human');
-        expect(myrep.generalization_of('animal', 'human')).toEqual(false);
+        expect(myrep.exists_generalization_of('animal', 'human')).toEqual(false);
     });
     it(' should return true if we add two generalization and then check if they both exist', function() {
         myrep.add_class('animal');
@@ -129,8 +129,8 @@ describe('Class diagramm', function() {
         myrep.add_class('bird');
         myrep.add_generalization('animal', 'human');
         myrep.add_generalization('animal', 'bird');
-        expect(myrep.generalization_of('animal', 'human')).toEqual(true);
-        expect(myrep.generalization_of('animal', 'bird')).toEqual(true);
+        expect(myrep.exists_generalization_of('animal', 'human')).toEqual(true);
+        expect(myrep.exists_generalization_of('animal', 'bird')).toEqual(true);
     });
     it(' should return true if instance is created and checked if this instance exists in our repository', function() {
         myrep.add_instance('darbinieks');
@@ -201,11 +201,19 @@ describe('Class diagramm', function() {
         myrep.delete_association('building', '2', '3', 'land', '5', '6');
         expect(myrep.exists_association('building', '2', '3', 'land', '5', '6')).toEqual(false);
     });
-    it(' should return true if we add two generalization and then check if they both exist', function() {
-        myrep.add_class('animal');
-        myrep.add_class('human');
-        myrep.add_class('bird');
-        myrep.add_generalization('animal', 'human');
-        myrep.add_generalization('animal', 'bird');
+    it(' should return all superclasses of a class if we check it', function() {
+        myrep.add_class('building');
+        myrep.add_class('land');
+        myrep.add_class('nation');
+        myrep.add_generalization('nation', 'land');
+        myrep.add_generalization('land', 'building');
+        var supercl = myrep.get_super_class('building');
+        console.log(supercl);
+        var v1 = supercl.pop();
+        var v2 = supercl.pop();
+        expect(myrep.exists_class(v1.name)).toEqual(true);
+        expect(myrep.exists_class(v2.name)).toEqual(true);
+        expect(v1.name).toEqual('nation');
+        expect(v2.name).toEqual('land');
     });
 });

@@ -83,6 +83,7 @@
 <body>
   <script>
     myrep = rep_init();
+    myrep.add_class('living');
     myrep.add_class('animal');
     myrep.add_class('human');
     myrep.add_class('bird');
@@ -100,6 +101,7 @@
     myrep.add_class('x');
     myrep.add_class('1');
     myrep.add_class('A');
+    myrep.add_generalization('living', 'animal');
     myrep.add_generalization('animal', 'asfhdgjfg');
     myrep.add_generalization('animal', '1');
     myrep.add_generalization('animal', 'z');
@@ -160,6 +162,11 @@
       }
     ];
     visual(cola, graph);
+    myrep.get_class_kard();
+    var land = myrep.get_super_class('mutant');
+    console.log(land);
+
+
 </script>
 </body>
 </html>
