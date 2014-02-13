@@ -216,4 +216,9 @@ describe('Class diagramm', function() {
         expect(v1.name).toEqual('nation');
         expect(v2.name).toEqual('land');
     });
+    it(' should retur a class if we ask for one', function() {
+        //myrep.add_class('tree');
+        var class1 = myrep.get_class('tree');
+        expect(myrep.exists_class(class1.name)).toEqual(true);
+    });
 });

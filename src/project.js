@@ -24,7 +24,12 @@ function rep_init() {
             delete this.class[class_name];
         },
         get_class: function(class_name) {
-            return this.class[class_name];
+            if (this.exists_class(class_name)) {
+                return this.class[class_name];
+            } else {
+                this.add_class(class_name);
+                return this.class[class_name];
+            }
         },
         add_atribute: function(class_name, atribute) {
             this.class[class_name]['atribute'].push(atribute);
