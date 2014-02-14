@@ -44,6 +44,9 @@ function rep_init() {
             delete this.class[class_name]['atribute'][
             (_.indexOf(this.class[class_name]['atribute'], atribute))];
         },
+        get_atribute: function(class_name) {
+            return this.class[class_name]['atribute'];
+        },
         add_generalization: function(super_class, sub_class) {
 
             this.class[super_class]['subclass'].push(sub_class);

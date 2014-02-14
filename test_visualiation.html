@@ -133,6 +133,8 @@
     myrep.add_atribute_value('lol', 'meh', 'asldjg');
     myrep.add_association('egg', 'white', '3', 'd', '5', '6');
     myrep.add_association('A', 'b', '1', 'B', 'a', '2');
+    myrep.get_atribute('animal');
+    console.log(myrep.get_atribute('animal'));
     var lin = (myrep.select_all_generalizations())
       .concat(myrep.select_all_instances_of());
     var lin2 = lin.concat(myrep.select_all_assoc());

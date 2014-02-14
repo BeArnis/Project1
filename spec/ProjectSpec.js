@@ -217,8 +217,17 @@ describe('Class diagramm', function() {
         expect(v2.name).toEqual('land');
     });
     it(' should retur a class if we ask for one', function() {
-        //myrep.add_class('tree');
         var class1 = myrep.get_class('tree');
         expect(myrep.exists_class(class1.name)).toEqual(true);
+    });
+    it(' should return an array of all atributes if we ask a class for its atributes', function() {
+        myrep.add_class('animal');
+        myrep.add_atribute('animal', 'Legs');
+        myrep.add_atribute('animal', 'Head_something');
+        myrep.add_atribute('animal', 'Tail');
+        var atribut_array = myrep.get_atribute('animal');
+        expect(atribut_array[0]).toEqual('Legs');
+        expect(atribut_array[1]).toEqual('Head_something');
+        expect(atribut_array[2]).toEqual('Tail');
     });
 });
