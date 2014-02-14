@@ -32,7 +32,13 @@ function rep_init() {
             }
         },
         add_atribute: function(class_name, atribute) {
-            this.class[class_name]['atribute'].push(atribute);
+            if (typeof(atribute) === 'object') {
+                var long = atribute.length;
+                for (var i = 0; i < long; i++) {
+                    this.class[class_name]['atribute'].push(atribute[i]);
+                    console.log(atribute[i]);
+                }
+            }else this.class[class_name]['atribute'].push(atribute);
         },
         exists_atribute: function(class_name, atribute) {
             if (_.indexOf(this.class[class_name]['atribute'], atribute) != -1) {

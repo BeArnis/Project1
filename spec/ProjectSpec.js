@@ -222,6 +222,7 @@ describe('Class diagramm', function() {
     });
     it(' should return an array of all atributes if we ask a class for its atributes', function() {
         myrep.add_class('animal');
+        myrep.add_class('bear');
         myrep.add_atribute('animal', 'Legs');
         myrep.add_atribute('animal', 'Head_something');
         myrep.add_atribute('animal', 'Tail');
@@ -229,5 +230,18 @@ describe('Class diagramm', function() {
         expect(atribut_array[0]).toEqual('Legs');
         expect(atribut_array[1]).toEqual('Head_something');
         expect(atribut_array[2]).toEqual('Tail');
+    });
+    it(' should add all the atributes we give to a class', function() {
+        myrep.add_class('bear');
+        var atribut_array = ['big', 'strong', 'lazy', 'slow'];
+        myrep.add_atribute('bear', atribut_array);
+        var attr1 = myrep.class.bear.atribute[0];
+        var attr2 = myrep.class.bear.atribute[1];
+        var attr3 = myrep.class.bear.atribute[2];
+        var attr4 = myrep.class.bear.atribute[3];
+        expect(attr1).toEqual('big');
+        expect(attr2).toEqual('strong');
+        expect(attr3).toEqual('lazy');
+        expect(attr4).toEqual('slow');
     });
 });
