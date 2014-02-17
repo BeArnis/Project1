@@ -52,7 +52,10 @@
       stroke: orange;
       stroke-dasharray: 7 12;
     }
-
+    .error {
+      stroke: red;
+      stroke-width: 3px;
+    }
     .association_path {
       stroke-width: 6px;
       stroke: green;
@@ -128,6 +131,7 @@
     myrep.add_atribute('animal', 'Legs');
     myrep.add_atribute('animal', 'Head_something');
     myrep.add_atribute('animal', 'Tail');
+    myrep.add_atribute('bird', 'beak');
     myrep.add_atribute_value('lol', 'ah', '1');
     myrep.add_atribute_value('lol', 'beh', '2');
     myrep.add_atribute_value('lol', 'meh', 'asldjg');
@@ -163,11 +167,11 @@
             .value()
       }
     ];
-    visual(cola, graph);
     myrep.get_class_kard();
     var land = myrep.get_super_class('mutant');
-    console.log(land);
-
+    myrep.transitive_closure_get_atributes('A');
+    myrep.transitive_closure_get_atributes_all_classes();
+    visual(cola, graph);
 
 </script>
 </body>

@@ -35,8 +35,11 @@ function rep_init() {
             if (typeof(atribute) === 'object') {
                 var long = atribute.length;
                 for (var i = 0; i < long; i++) {
-                    this.class[class_name]['atribute'].push(atribute[i]);
-                    console.log(atribute[i]);
+                    if (_.indexOf(this.class[class_name][
+                        'atribute'], atribute[i]) == -1)
+                    {
+                        this.class[class_name]['atribute'].push(atribute[i]);
+                    }
                 }
             }else this.class[class_name]['atribute'].push(atribute);
         },
@@ -51,7 +54,9 @@ function rep_init() {
             (_.indexOf(this.class[class_name]['atribute'], atribute))];
         },
         get_atribute: function(class_name) {
-            return this.class[class_name]['atribute'];
+            if (this.class[class_name]['atribute'].length != 0) {
+                return this.class[class_name]['atribute'];
+            } else return [];
         },
         add_generalization: function(super_class, sub_class) {
 
@@ -263,13 +268,6 @@ function rep_init() {
              }
             return m;
         },
-        get_all_class_names: function() {
-            var m = [];
-            for (var key in this.class) {
-                m.push(key);
-            }
-            return m;
-        },
         select_all_generalizations: function() {
             var sub = [];
             var m = [];
@@ -334,13 +332,6 @@ function rep_init() {
                 var end_class = this.association[ass]['start']['class_to'];
 
 
-                    /*sassoc_arr.push({
-                        source: _.indexOf(m, begin_class),
-                        target: _.indexOf(m, end_class),
-                        assoc: this.association[ass],
-                        type: 'association'
-                    });*/
-
                     sassoc_arr.push({
                         source: _.indexOf(m, end_class),
                         target: _.indexOf(m, begin_class),
@@ -386,32 +377,42 @@ function rep_init() {
                 var id2 = kard.start.class_to;
                 role[id1] = kard.start.role;
                 role[id2] = kard.end.role;
-                console.log(role);
             });
-
+            console.log(role);
             return role;
         },
         get_super_class: function(class_name, s) {
 
-            //console.log(s);
             if (s === undefined) {
                 var s = [];
             }
             var a;
             if (this.class[class_name]['superclass'].length == 0) {
-                return '*';
+                return;
             }
             _.filter(this.class[class_name][
                 'superclass'], function(sup_cl) {
                     a = sup_cl;
                 return sup_cl;
             });
-
             s.push(this.class[a]);
-            //s[a] = this.class[a];
-            //console.log(s);
             var cl = this.get_super_class(a, s);
             return s;
+        },
+        transitive_closure_get_atributes: function(class_name) {
+            var supclass1 = this.get_super_class(class_name);
+            var obj = this;
+            _.filter(supclass1, function(clas) {
+                var attr = obj.get_atribute(clas.name);
+                    obj.add_atribute(class_name, attr);
+            });
+        },
+        transitive_closure_get_atributes_all_classes: function() {
+            var class_arr = this.select_all_classes();
+            var obj = this;
+            _.filter(class_arr, function(clas) {
+                    obj.transitive_closure_get_atributes(clas.name);
+            });
         }
     };
     return repository;

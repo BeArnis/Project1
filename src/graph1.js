@@ -6,7 +6,7 @@ function visual(cola_lib, graph) {
     var color = d3.scale.category20();
 
     var cola_a = cola_lib.d3adaptor()
-        .linkDistance(330)
+        .linkDistance(430)
         .avoidOverlaps(true)
         .flowLayout()
         .size([width, height]);
@@ -155,7 +155,8 @@ function visual(cola_lib, graph) {
         var wi = [];
         var height = 0;
         var rect = g.append('rect')
-            .style('fill', 'red')
+            .style('fill', '#00FFFF')
+            .attr('class', ' error')
             .attr('x', 0)
             .attr('y', 0)
             .attr('rx', 10).attr('ry', 10)
