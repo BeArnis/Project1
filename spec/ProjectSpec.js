@@ -244,7 +244,19 @@ describe('Class diagramm', function() {
         expect(attr3).toEqual('lazy');
         expect(attr4).toEqual('slow');
     });
-    it(' should add an error to the instance if the instance has a kardinality and does not as many links as the cardinality sais', function() {
+    it(' should add an error to the instance if the instance has a kardinality and does not have as many links as the cardinality says', function() {
+        myrep.add_class('building');
+        myrep.add_class('land');
+        myrep.add_association('building', 'floor', '2', '4', 'land', 'people', '3', '6');
+        myrep.add_instance('room1');
+        myrep.add_instance('room2');
+        myrep.add_instance('room3');
+        myrep.add_link('room1', 'floor', 'room2');
+        myrep.add_instance_of('building', 'room1');
+        myrep.instance_gets_assoc_info('room1');
+        expect(myrep.instance_link_validation('room1')).toEqual(false);
+    });
+    it(' should return true if the instance has a kardinality and does have as many links as the cardinality says', function() {
         myrep.add_class('building');
         myrep.add_class('land');
         myrep.add_association('building', 'floor', '2', '4', 'land', 'people', '3', '6');
@@ -256,6 +268,5 @@ describe('Class diagramm', function() {
         myrep.add_instance_of('building', 'room1');
         myrep.instance_gets_assoc_info('room1');
         expect(myrep.instance_link_validation('room1')).toEqual(true);
-        
     });
 });
