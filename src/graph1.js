@@ -1,7 +1,7 @@
 function visual(cola_lib, graph) {
 
     var width = 3060,
-        height = 2200;
+        height = 3200;
 
     var color = d3.scale.category20();
 
@@ -156,7 +156,7 @@ function visual(cola_lib, graph) {
         var height = 0;
         var rect = g.append('rect')
             .style('fill', '#00FFFF')
-            .attr('class', ' error')
+            //.attr('class', ' error')
             .attr('x', 0)
             .attr('y', 0)
             .attr('rx', 10).attr('ry', 10)
@@ -206,6 +206,12 @@ function visual(cola_lib, graph) {
         var height = 0;
         var rect = g.append('rect')
             .style('fill', 'orange')
+            .attr('class', function(d) {
+                if (d.something_is_wrong == 'error') {
+                    return 'error';
+                } else return 'good';
+                console.log(d);
+                })
             .call(cola_a.drag)
             .attr('x', 0)
             .attr('y', 0)

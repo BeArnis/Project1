@@ -190,16 +190,16 @@ describe('Class diagramm', function() {
     it(' should return true if association is added between two classes and checked if it is there', function() {
         myrep.add_class('building');
         myrep.add_class('land');
-        myrep.add_association('building', '2', '3', 'land', '5', '6');
+        myrep.add_association('building', '2', '3', '4', 'land', '5', '3', '6');
 
-        expect(myrep.exists_association('building', '2', '3', 'land', '5', '6')).toEqual(true);
+        expect(myrep.exists_association('building', '2', '3', '4', 'land', '5', '3', '6')).toEqual(true);
     });
     it(' should return false if association is added between two classes and deleted and checked if it is there', function() {
         myrep.add_class('building');
         myrep.add_class('land');
-        myrep.add_association('building', '2', '3', 'land', '5', '6');
-        myrep.delete_association('building', '2', '3', 'land', '5', '6');
-        expect(myrep.exists_association('building', '2', '3', 'land', '5', '6')).toEqual(false);
+        myrep.add_association('building', '2', '3', '4', 'land', '5', '3', '6');
+        myrep.delete_association('building', '2', '3', '4', 'land', '5', '3', '6');
+        expect(myrep.exists_association('building', '2', '3', '4', 'land', '5', '3', '6')).toEqual(false);
     });
     it(' should return all superclasses of a class if we check it', function() {
         myrep.add_class('building');
@@ -243,5 +243,19 @@ describe('Class diagramm', function() {
         expect(attr2).toEqual('strong');
         expect(attr3).toEqual('lazy');
         expect(attr4).toEqual('slow');
+    });
+    it(' should add an error to the instance if the instance has a kardinality and does not as many links as the cardinality sais', function() {
+        myrep.add_class('building');
+        myrep.add_class('land');
+        myrep.add_association('building', 'floor', '2', '4', 'land', 'people', '3', '6');
+        myrep.add_instance('room1');
+        myrep.add_instance('room2');
+        myrep.add_instance('room3');
+        myrep.add_link('room1', 'floor', 'room2');
+        myrep.add_link('room1', 'floor', 'room3');
+        myrep.add_instance_of('building', 'room1');
+        myrep.instance_gets_assoc_info('room1');
+        expect(myrep.instance_link_validation('room1')).toEqual(true);
+        
     });
 });

@@ -98,7 +98,7 @@
     myrep.add_class('B');
     myrep.add_class('a');
     myrep.add_class('m');
-    myrep.add_class('d');
+    myrep.add_class('freak');
     myrep.add_class('asfhdgjfg');
     myrep.add_class('z');
     myrep.add_class('x');
@@ -113,7 +113,7 @@
     myrep.add_generalization('animal', 'a');
     myrep.add_generalization('animal', 'alien');
     myrep.add_generalization('animal', 'B');
-    myrep.add_generalization('animal', 'd');
+    myrep.add_generalization('animal', 'freak');
     myrep.add_generalization('human', 'mutant');
     myrep.add_generalization('bird', 'mutant');
     myrep.add_generalization('animal', 'reptile');
@@ -135,8 +135,9 @@
     myrep.add_atribute_value('lol', 'ah', '1');
     myrep.add_atribute_value('lol', 'beh', '2');
     myrep.add_atribute_value('lol', 'meh', 'asldjg');
-    myrep.add_association('egg', 'white', '3', 'd', '5', '6');
-    myrep.add_association('A', 'b', '1', 'B', 'a', '2');
+    myrep.add_association('egg', 'white', '1',
+     '*', 'bird', 'Draugi', '1', '*');
+    myrep.add_association('A', 'b', '1', '2', 'B', 'a', '1', '3');
     myrep.get_atribute('animal');
     console.log(myrep.get_atribute('animal'));
     var lin = (myrep.select_all_generalizations())
@@ -171,6 +172,9 @@
     var land = myrep.get_super_class('mutant');
     myrep.transitive_closure_get_atributes('A');
     myrep.transitive_closure_get_atributes_all_classes();
+    myrep.instance_gets_assoc_info('lol');
+    myrep.instance_link_validation('lol');
+    console.log(myrep.is_instance_of('wtf', 'bird'));
     visual(cola, graph);
 
 </script>

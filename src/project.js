@@ -88,6 +88,7 @@ function rep_init() {
                 link: [],
                 link_to: [],
                 instance_of: [],
+                something_is_wrong: null,
                 type: 'instance'
             };
         },
@@ -195,19 +196,25 @@ function rep_init() {
             }
             return false;
         },
-        add_association: function(begin_class, begin_role, begin_kard,
-                                end_class, end_role, end_kard) {
+        add_association: function(begin_class, begin_role, bmin, bmax,
+                                end_class, end_role, emin, emax) {
 
+            var begin_kard = bmin + '...' + bmax;
+            var end_kard = emin + '...' + emax;
             var assoc = {
                 start: {
                     class_to: end_class,
                     role: begin_role,
-                    kard: begin_kard
+                    kard: begin_kard,
+                    min: bmin,
+                    max: bmax
                 },
                 end: {
                     class_to: begin_class,
                     role: end_role,
-                    kard: end_kard
+                    kard: end_kard,
+                    min: emin,
+                    max: emax
             }};
             var id = begin_class + begin_role + begin_kard +
             end_class + end_role + end_kard;
@@ -219,8 +226,8 @@ function rep_init() {
             this.class[end_class]['assoc'].push(assoc.end);
 
         },
-        delete_association: function(begin_class, begin_role, begin_kard,
-                                    end_class, end_role, end_kard) {
+        delete_association: function(begin_class, begin_role, bmin, bmax,
+                                    end_class, end_role, emin, emax) {
 
             var assoc1 = _.find(this.class[begin_class]['assoc'],
             function(assoc) { return assoc.class_to === end_class;});
@@ -234,8 +241,8 @@ function rep_init() {
                 this.class[end_class][
                 'assoc'] = _.without(this.class[end_class]['assoc'], assoc2);
         },
-        exists_association: function(begin_class, begin_role, begin_kard,
-                                    end_class, end_role, end_kard) {
+        exists_association: function(begin_class, begin_role, bmin, bmax,
+                                    end_class, end_role, emin, emax) {
 
             var b, e;
 
@@ -413,6 +420,60 @@ function rep_init() {
             _.filter(class_arr, function(clas) {
                     obj.transitive_closure_get_atributes(clas.name);
             });
+        },
+        is_sup_and_sub: function(class_name) {
+            this.class[class_name]['superclass'];
+            this.class[class_name]['subclass'];
+
+            var wut = _.find(this.class[class_name][
+                'superclass'], function(does_match) {
+                _.indexOf(this.class[class_name]['subclass'], does_match);
+                return;
+            });
+            console.log(wut);
+
+        },
+        instance_gets_assoc_info: function(instance_name) {
+            var classes = this.instances[instance_name]['instance_of'];
+
+            var obj = this;
+            _.filter(classes, function(class_name) {
+                obj.instances[instance_name][
+                'assoc_from_class'] = obj.class[class_name]['assoc'];
+            });
+            console.log(obj.instances[instance_name]);
+        },
+        instance_link_validation: function(instance_name) {
+            var min = this.instances[instance_name]['assoc_from_class'][0]['min'];
+            var max = this.instances[instance_name]['assoc_from_class'][0]['max'];
+
+            if (this.instances[instance_name]['link'].length < min || this.instances[instance_name]['link'].length > max) {
+                this.instances[instance_name]['something_is_wrong'] = 'error';
+                return false;
+                console.log('error');
+            }
+            return true;
+            //console.log(min);
+        },
+        is_instance_of: function(instance_name, class_name) {
+            var instance_to = this.instances[instance_name]['instance_of'];
+            var obj = this;
+            var all = [];
+            var bool = false;
+            _.each(instance_to, function(class_of) {
+                all = _.union(all, obj.get_super_class(class_of));
+                console.log(all);
+            });
+            _.each(all, function(class_objeckt) {
+                if (class_objeckt.name == class_name) { bool = true;}
+            });
+            if (_.indexOf(this.instances[instance_name][
+                'instance_of'], class_name) != -1 || bool == true) {
+                return true;
+            } else {
+                this.instances[instance_name]['something_is_wrong'] = 'error';
+                return false;
+            }
         }
     };
     return repository;
