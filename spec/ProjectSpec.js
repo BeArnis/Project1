@@ -268,7 +268,7 @@ describe('Class diagramm', function() {
         expect(myrep.class.embrio.atribute[1]).toEqual('strong');
         expect(myrep.class.embrio.atribute[2]).toEqual('lazy');
         expect(myrep.class.embrio.atribute[3]).toEqual('slow');
-        
+
         expect(attr1).toEqual('big');
         expect(attr2).toEqual('strong');
         expect(attr3).toEqual('lazy');
@@ -285,6 +285,23 @@ describe('Class diagramm', function() {
         myrep.add_instance_of('building', 'room1');
         myrep.instance_gets_assoc_info('room1');
         expect(myrep.instance_link_validation('room1')).toEqual(false);
+    });
+    it(' should add an error to the instance if the instance has a kardinality and does not have as many links as the cardinality says', function() {
+        myrep.add_class('building');
+        myrep.add_class('land');
+        myrep.add_association('building', 'floor', '2', '4', 'land', 'people', '3', '6');
+        myrep.add_instance('room1');
+        myrep.add_instance_of('building', 'room1');
+        myrep.instance_gets_assoc_info('room1');
+        var other_class = myrep.instances.room1.assoc_from_class[0].class_to;
+        var role = myrep.instances.room1.assoc_from_class[0].role;
+        var min = myrep.instances.room1.assoc_from_class[0].min;
+        var max = myrep.instances.room1.assoc_from_class[0].max;
+        console.log(myrep.instances.room1.assoc_from_class[0]);
+        expect(other_class).toEqual('land');
+        expect(role).toEqual('floor');
+        expect(min).toEqual('2');
+        expect(max).toEqual('4');
     });
     it(' should return true if the instance has a kardinality and does have as many links as the cardinality says', function() {
         myrep.add_class('building');
