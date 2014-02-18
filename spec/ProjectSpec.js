@@ -244,6 +244,36 @@ describe('Class diagramm', function() {
         expect(attr3).toEqual('lazy');
         expect(attr4).toEqual('slow');
     });
+    it(' should add all the atributes we give to a class', function() {
+        myrep.add_class('animal');
+        myrep.add_class('bear');
+        myrep.add_class('baby_bear');
+        myrep.add_class('embrio');
+        myrep.add_generalization('animal', 'bear');
+        myrep.add_generalization('bear', 'baby_bear');
+        myrep.add_generalization('baby_bear', 'embrio');
+        var atribut_array = ['big', 'strong', 'lazy', 'slow'];
+        myrep.add_atribute('bear', atribut_array);
+        myrep.transitive_closure_get_atributes_all_classes();
+        var attr1 = myrep.class.embrio.atribute[0];
+        var attr2 = myrep.class.embrio.atribute[1];
+        var attr3 = myrep.class.embrio.atribute[2];
+        var attr4 = myrep.class.embrio.atribute[3];
+        expect(myrep.class.baby_bear.atribute[0]).toEqual('big');
+        expect(myrep.class.baby_bear.atribute[1]).toEqual('strong');
+        expect(myrep.class.baby_bear.atribute[2]).toEqual('lazy');
+        expect(myrep.class.baby_bear.atribute[3]).toEqual('slow');
+
+        expect(myrep.class.embrio.atribute[0]).toEqual('big');
+        expect(myrep.class.embrio.atribute[1]).toEqual('strong');
+        expect(myrep.class.embrio.atribute[2]).toEqual('lazy');
+        expect(myrep.class.embrio.atribute[3]).toEqual('slow');
+        
+        expect(attr1).toEqual('big');
+        expect(attr2).toEqual('strong');
+        expect(attr3).toEqual('lazy');
+        expect(attr4).toEqual('slow');
+    });
     it(' should add an error to the instance if the instance has a kardinality and does not have as many links as the cardinality says', function() {
         myrep.add_class('building');
         myrep.add_class('land');
