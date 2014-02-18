@@ -388,11 +388,18 @@ function rep_init() {
             console.log(role);
             return role;
         },
-        get_super_class: function(class_name, s) {
+        get_super_class: function(class_name, s, class_arr) {
 
             if (s === undefined) {
                 var s = [];
             }
+            if (class_arr === undefined) {
+                var class_arr = [];
+            }
+            if (_.indexOf(class_arr, class_name) != -1) {
+                return;
+            }
+            class_arr.push(class_name);
             var a;
             if (this.class[class_name]['superclass'].length == 0) {
                 return;
@@ -403,7 +410,7 @@ function rep_init() {
                 return sup_cl;
             });
             s.push(this.class[a]);
-            var cl = this.get_super_class(a, s);
+            var cl = this.get_super_class(a, s, class_arr);
             return s;
         },
         transitive_closure_get_atributes: function(class_name) {
@@ -421,16 +428,20 @@ function rep_init() {
                     obj.transitive_closure_get_atributes(clas.name);
             });
         },
-        is_sup_and_sub: function(class_name) {
-            this.class[class_name]['superclass'];
-            this.class[class_name]['subclass'];
-
-            var wut = _.find(this.class[class_name][
-                'superclass'], function(does_match) {
-                _.indexOf(this.class[class_name]['subclass'], does_match);
-                return;
+        is_cycle: function(class_name) {
+            //this.class[class_name]['superclass'];
+            //this.class[class_name]['subclass'];
+            var a = false;
+            var obj = this;
+            var subper = this.get_super_class(class_name);
+            var wut = _.find(subper, function(does_match) {
+                if (_.indexOf(subper, does_match) != -1) {
+                    a = true;
+                }
+                console.log(does_match);
             });
-            console.log(wut);
+            //console.log(subper);
+            return a;
 
         },
         instance_gets_assoc_info: function(instance_name) {
@@ -441,7 +452,7 @@ function rep_init() {
                 obj.instances[instance_name][
                 'assoc_from_class'] = obj.class[class_name]['assoc'];
             });
-            console.log(obj.instances[instance_name]);
+            //console.log(obj.instances[instance_name]);
         },
         instance_link_validation: function(instance_name) {
             var min = this.instances[instance_name]['assoc_from_class'][0]['min'];
@@ -462,7 +473,7 @@ function rep_init() {
             var bool = false;
             _.each(instance_to, function(class_of) {
                 all = _.union(all, obj.get_super_class(class_of));
-                console.log(all);
+                //console.log(all);
             });
             _.each(all, function(class_objeckt) {
                 if (class_objeckt.name == class_name) { bool = true;}

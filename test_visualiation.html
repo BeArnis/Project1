@@ -121,6 +121,7 @@
     myrep.add_generalization('animal', 'bird');
     myrep.add_generalization('human', 'baby');
     myrep.add_generalization('bird', 'egg');
+    myrep.add_generalization('a', 'living');
     myrep.add_instance('lol');
     myrep.add_instance('yolo');
     myrep.add_instance('wtf');
@@ -169,12 +170,13 @@
       }
     ];
     myrep.get_class_kard();
-    var land = myrep.get_super_class('mutant');
+    //var land = myrep.get_super_class('mutant');
     myrep.transitive_closure_get_atributes('A');
     myrep.transitive_closure_get_atributes_all_classes();
     myrep.instance_gets_assoc_info('lol');
     myrep.instance_link_validation('lol');
-    console.log(myrep.is_instance_of('wtf', 'bird'));
+    //console.log(myrep.is_instance_of('wtf', 'bird'));
+    //myrep.is_cycle('animal');
     visual(cola, graph);
 
 </script>

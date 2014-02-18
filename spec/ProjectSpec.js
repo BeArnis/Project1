@@ -279,7 +279,7 @@ describe('Class diagramm', function() {
         myrep.add_instance_of('human', 'Janis');
         expect(myrep.is_instance_of('Janis', 'child')).toEqual(false);
     });
-        it(' should return true if we check if an instance is the instance of a class or its subclasses', function() {
+    it(' should return true if we check if an instance is the instance of a class or its subclasses', function() {
         myrep.add_class('animal');
         myrep.add_class('human');
         myrep.add_class('child');
@@ -288,6 +288,15 @@ describe('Class diagramm', function() {
         myrep.add_instance('Janis');
         myrep.add_instance_of('human', 'Janis');
         expect(myrep.is_instance_of('Janis', 'animal')).toEqual(true);
+    });
+    it(' ', function() {
+        myrep.add_class('animal');
+        myrep.add_class('human');
+        myrep.add_class('child');
+        myrep.add_generalization('animal', 'human');
+        myrep.add_generalization('human', 'child');
+        myrep.add_generalization('child', 'animal');
+        expect(myrep.is_cycle('animal')).toEqual(true);
     });
 
 });
