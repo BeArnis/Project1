@@ -156,9 +156,14 @@ function visual(cola_lib, graph) {
         var height = 0;
         var rect = g.append('rect')
             .style('fill', '#00FFFF')
-            //.attr('class', ' error')
+            .attr('class', function(d) {
+                if (d.something_is_wrong == 'error') {
+                    return 'error';
+                } else return 'good';
+            })
             .attr('x', 0)
             .attr('y', 0)
+
             .attr('rx', 10).attr('ry', 10)
             .call(cola_a.drag);
 
@@ -210,8 +215,7 @@ function visual(cola_lib, graph) {
                 if (d.something_is_wrong == 'error') {
                     return 'error';
                 } else return 'good';
-                console.log(d);
-                })
+            })
             .call(cola_a.drag)
             .attr('x', 0)
             .attr('y', 0)

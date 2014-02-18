@@ -14,6 +14,7 @@ function rep_init() {
                 assoc: [],
                 superclass: [],
                 subclass: [],
+                something_is_wrong: null,
                 type: 'class'
             };
         },
@@ -436,7 +437,9 @@ function rep_init() {
             var subper = this.get_super_class(class_name);
             var wut = _.find(subper, function(does_match) {
                 if (_.indexOf(subper, does_match) != -1) {
+                    obj.class[class_name]['something_is_wrong'] = 'error';
                     a = true;
+                    
                 }
                 console.log(does_match);
             });

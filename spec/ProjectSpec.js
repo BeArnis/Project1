@@ -289,7 +289,7 @@ describe('Class diagramm', function() {
         myrep.add_instance_of('human', 'Janis');
         expect(myrep.is_instance_of('Janis', 'animal')).toEqual(true);
     });
-    it(' ', function() {
+    it(' should return true if there is a loop between classes if we check a class for it', function() {
         myrep.add_class('animal');
         myrep.add_class('human');
         myrep.add_class('child');
@@ -298,5 +298,12 @@ describe('Class diagramm', function() {
         myrep.add_generalization('child', 'animal');
         expect(myrep.is_cycle('animal')).toEqual(true);
     });
-
+    it(' should return false if we look for a loop in classes generalization but there is none', function() {
+        myrep.add_class('animal');
+        myrep.add_class('human');
+        myrep.add_class('child');
+        myrep.add_generalization('animal', 'human');
+        myrep.add_generalization('human', 'child');
+        expect(myrep.is_cycle('animal')).toEqual(false);
+    });
 });
