@@ -269,7 +269,7 @@ describe('Class diagramm', function() {
         myrep.instance_gets_assoc_info('room1');
         expect(myrep.instance_link_validation('room1')).toEqual(true);
     });
-    it(' should return fasle if we check if an instance is the instance of a class or its subclasses', function() {
+    it(' should return fasle if we check if an instance is the instance of a class or its subclasses and it is not', function() {
         myrep.add_class('animal');
         myrep.add_class('human');
         myrep.add_class('child');
@@ -278,6 +278,16 @@ describe('Class diagramm', function() {
         myrep.add_instance('Janis');
         myrep.add_instance_of('human', 'Janis');
         expect(myrep.is_instance_of('Janis', 'child')).toEqual(false);
+    });
+        it(' should return true if we check if an instance is the instance of a class or its subclasses', function() {
+        myrep.add_class('animal');
+        myrep.add_class('human');
+        myrep.add_class('child');
+        myrep.add_generalization('animal', 'human');
+        myrep.add_generalization('human', 'child');
+        myrep.add_instance('Janis');
+        myrep.add_instance_of('human', 'Janis');
+        expect(myrep.is_instance_of('Janis', 'animal')).toEqual(true);
     });
 
 });
