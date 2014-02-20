@@ -15,6 +15,7 @@ function rep_init() {
                 superclass: [],
                 subclass: [],
                 something_is_wrong: null,
+                errors: [],
                 type: 'class'
             };
         },
@@ -86,9 +87,11 @@ function rep_init() {
             this.instances[instance_name] = {
                 name: instance_name,
                 atribute: [],
+                atribute_form_class: [],
                 link: [],
                 link_to: [],
                 instance_of: [],
+                errors: [],
                 something_is_wrong: null,
                 type: 'instance'
             };
@@ -151,14 +154,36 @@ function rep_init() {
         },
         add_atribute_value: function(instance_name, atribute_name, value) {
 
-            this.instances[instance_name]['atribute'].push(atribute_name);
-            this.instances[instance_name]['atribute'][atribute_name] = [];
-            this.instances[instance_name]['atribute'][
-            atribute_name].push(value);
+            this.instance_gets_atributes_from_instance_of_class(instance_name);
+
+            var right_place = _.find(this.instances[instance_name]['atribute'], function(adding_atribute) {
+                return adding_atribute == atribute_name;
+            });
+
+            if (right_place == undefined) {
+                this.instances[instance_name]['something_is_wrong'] = 'error';
+                var error = {
+                    error_type: '#1',
+                    instance: instance_name,
+                    atribute: atribute_name
+                }
+
+                //'No such ' + atribute_name + ' atribute exists, dont add atribute values to atributes that dont exist';
+                this.instances[instance_name].errors.push(error);
+            } else {
+
+                this.instances[instance_name]['atribute_form_class'].push({
+                    atribut: atribute_name,
+                    value_name: value
+                });
+            }
+
         },
         exists_atribute_value: function(instance_name, atribute_name, value) {
-
-            if (_.indexOf(this.instances[instance_name]['atribute'],
+            var atributes_name = _.pluck(this.instances[
+                instance_name]['atribute_form_class'], 'atribut');
+            console.log(atributes_name);
+            if (_.indexOf(atributes_name,
                 atribute_name) != -1) {
                 return true;
             }
@@ -204,6 +229,7 @@ function rep_init() {
             var end_kard = emin + '...' + emax;
             var assoc = {
                 start: {
+                    from_class: begin_class,
                     class_to: end_class,
                     role: begin_role,
                     kard: begin_kard,
@@ -211,6 +237,7 @@ function rep_init() {
                     max: bmax
                 },
                 end: {
+                    from_class: end_class,
                     class_to: begin_class,
                     role: end_role,
                     kard: end_kard,
@@ -378,17 +405,7 @@ function rep_init() {
 
             return links;
         },
-        get_class_kard: function() {
-            var role = [];
-            _.filter(this.association, function(kard) {
-                var id1 = kard.end.class_to;
-                var id2 = kard.start.class_to;
-                role[id1] = kard.start.role;
-                role[id2] = kard.end.role;
-            });
-            console.log(role);
-            return role;
-        },
+
         get_super_class: function(class_name, s, class_arr) {
 
             if (s === undefined) {
@@ -397,6 +414,7 @@ function rep_init() {
             if (class_arr === undefined) {
                 var class_arr = [];
             }
+
             if (_.indexOf(class_arr, class_name) != -1) {
                 return;
             }
@@ -429,54 +447,126 @@ function rep_init() {
                     obj.transitive_closure_get_atributes(clas.name);
             });
         },
+        transitive_closure_is_cycle_all_classes: function() {
+            var class_arr = this.select_all_classes();
+            var obj = this;
+            _.filter(class_arr, function(clas) {
+                    obj.is_cycle(clas.name);
+            });
+        },
         is_cycle: function(class_name) {
             //this.class[class_name]['superclass'];
             //this.class[class_name]['subclass'];
             var a = false;
             var obj = this;
             var subper = this.get_super_class(class_name);
+            var subcl = this.class[class_name]['subclass'];
             var wut = _.find(subper, function(does_match) {
-                if (_.indexOf(subper, does_match) != -1) {
+                if (_.indexOf(subcl, does_match.name) != -1) {
                     obj.class[class_name]['something_is_wrong'] = 'error';
+                    var error = {
+                        error_type: '#2',
+                        class_call: class_name
+                    }
+
+                    //'class ' + class_name + ' is in a cycle';
+                    obj.class[class_name].errors.push(error);
                     a = true;
-                    
                 }
-                console.log(does_match);
             });
-            //console.log(subper);
             return a;
 
         },
+        get_assoc_info_for_subclass: function(class_name) {
+            var superclass = this.get_super_class(class_name);
+            var assoc_arr = [];
+            _.each(superclass, function(class_obj) {
+                if (class_obj.assoc.length != 0) {
+                    assoc_arr.push(class_obj.assoc);
+                }
+
+            });
+            assoc_arr.push(this.class[class_name]['assoc']);
+
+            return assoc_arr;
+        },
         instance_gets_assoc_info: function(instance_name) {
             var classes = this.instances[instance_name]['instance_of'];
+            var obj = this;
+            var class_assoc_arr = [];
+
+            _.each(classes, function(class_name) {
+                class_assoc_arr = _.union(class_assoc_arr, obj.get_assoc_info_for_subclass(class_name));
+            });
+
+            obj.instances[instance_name]['assoc_from_class'] = class_assoc_arr;
+
+        },
+        instance_link_validation_start: function(instance_name) {
+            this.instance_gets_assoc_info(instance_name);
 
             var obj = this;
-            _.filter(classes, function(class_name) {
-                obj.instances[instance_name][
-                'assoc_from_class'] = obj.class[class_name]['assoc'];
-            });
-            //console.log(obj.instances[instance_name]);
-        },
-        instance_link_validation: function(instance_name) {
-            var min = this.instances[instance_name]['assoc_from_class'][0]['min'];
-            var max = this.instances[instance_name]['assoc_from_class'][0]['max'];
+            _.each(this.instances[instance_name]['assoc_from_class'], function(assoc_arr) {
+                obj.instance_link_validation_end(instance_name, assoc_arr[0]);
 
-            if (this.instances[instance_name]['link'].length < min || this.instances[instance_name]['link'].length > max) {
+            
+            });
+        },
+        instance_link_validation_end: function(instance_name, assoc_info) {
+            var min = assoc_info['min'];
+            var max = assoc_info['max'];
+            var role = assoc_info['role'];
+            var obj = this;
+            var bool = true;
+            var role_arr = _.filter(this.instances[instance_name]['link'], function(is_role) {
+                return is_role == role;
+            });
+            var how_many_links_have_the_right_role = role_arr.length;
+
+
+            if (how_many_links_have_the_right_role < min) {
                 this.instances[instance_name]['something_is_wrong'] = 'error';
-                return false;
-                console.log('error');
+                var error = {
+                    error_type: '#3',
+                    linstance: instance_name,
+                    role_name: role
+                }
+
+
+                //'error: incstance ' + instance_name + ' has not the right count of links with linkname ' + role;
+                this.instances[instance_name].errors.push(error);
+                bool = false;
+            }
+
+            if (how_many_links_have_the_right_role > max) {
+                this.instances[instance_name]['something_is_wrong'] = 'error';
+                var error = {
+                    error_type: '#4',
+                    linstance: instance_name,
+                    role_name: role
+                };
+                this.instances[instance_name].errors.push(error);
+                bool = false;
+            }
+
+            _.filter(this.instances[instance_name]['link_to'], function(link_to_instances) {
+                if (!obj.is_instance_of(link_to_instances, assoc_info.from_class)) {
+                    bool = false;
+                }
+            });
+            if (bool) {
+                return bool;
             }
             return true;
-            //console.log(min);
         },
         is_instance_of: function(instance_name, class_name) {
             var instance_to = this.instances[instance_name]['instance_of'];
             var obj = this;
             var all = [];
             var bool = false;
+
             _.each(instance_to, function(class_of) {
                 all = _.union(all, obj.get_super_class(class_of));
-                //console.log(all);
             });
             _.each(all, function(class_objeckt) {
                 if (class_objeckt.name == class_name) { bool = true;}
@@ -486,7 +576,91 @@ function rep_init() {
                 return true;
             } else {
                 this.instances[instance_name]['something_is_wrong'] = 'error';
+                var error = {
+                    error_type: 'not_inst_of_class',
+                    class_call: class_name,
+                    instance: instance_name
+                };
+                //'error: incstance ' + instance_name + ' is not under class ' + class_name;
+                this.instances[instance_name].errors.push(error);
                 return false;
+            }
+        },
+        instance_gets_atributes_from_instance_of_class: function(instance_name) {
+            var class_arr = this.instances[instance_name]['instance_of'];
+            var obj = this;
+            this.transitive_closure_get_atributes_all_classes();
+
+            _.each(class_arr, function(class_n) {
+
+                obj.instances[instance_name]['atribute'] = _.union(obj.instances[instance_name]['atribute'], obj.get_atribute(class_n));
+            });
+        },
+        class_error: function(class_name) {
+            var error_arr = this.class[class_name].errors;
+            var obj = this;
+            _.each(error_arr, function(error) {
+                obj.error_handle(error);
+            });
+        },
+        instance_error: function(instance_name) {
+            var error_arr = this.instances[instance_name].errors;
+            var obj = this;
+            _.each(error_arr, function(error) {
+                obj.error_handle(error);
+            });
+        },
+        instance_atribute_error: function(instance_name) {
+            var atributes = this.instances[instance_name]['atribute'];
+            var atributes_with_values = _.pluck(this.instances[instance_name]['atribute_form_class'], 'atribut');
+            var difference = _.difference(atributes, atributes_with_values);
+            var obj = this;
+            //var difference2 = _.difference(atributes_with_values, atributes);
+            //console.log(difference1, difference2, atributes, atributes_with_values);
+            _.each(difference, function(no_value) {
+                obj.instances[instance_name]['something_is_wrong'] = 'error';
+                var error = {
+                    error_type: '#5',
+                    instance: instance_name,
+                    atribute: no_value
+                }
+
+
+                //'Instance ' + instance_name + ' has an atribute ' + no_value + ' with no value assigned to it, please give it an atribute';
+                obj.instances[instance_name].errors.push(error);
+            });
+        },
+        add_class_atributes_to_all_instances: function() {
+            var instance_names = [];
+            var obj = this;
+            for (var cl in this.instances) {
+                    instance_names.push(cl);
+                }
+            _.each(instance_names, function(instance) {
+                obj.instance_gets_atributes_from_instance_of_class(instance);
+            });
+        },
+        add_atribute_errors_to_all_instances: function() {
+            var instance_names = [];
+            var obj = this;
+            for (var cl in this.instances) {
+                    instance_names.push(cl);
+                }
+            _.each(instance_names, function(instance) {
+                obj.instance_atribute_error(instance);
+            });
+        },
+        error_handle: function(error_obj) {
+            if (error_obj.error_type == '#1') {
+                console.warn('No such ' + error_obj.atribute + ' atribute exists in instance' + error_obj.instance + ' , dont add atribute values to atributes that dont exist');
+            } else if (error_obj.error_type == '#2') {
+                console.warn('class ' + error_obj.class_call + ' is in a cycle');
+            } else if (error_obj.error_type == '#3') {
+                console.warn('error: incstance ' + error_obj.instance + ' has not enough links with linkname ' + role);
+            } else if (error_obj.error_type == '#4') {
+                console.warn('error: incstance ' + error_obj.instance + ' has not too many links with linkname ' + role);
+            } else if (error_obj.error_type == '#5') {
+                console.warn('Instance ' + error_obj.instance + ' has an atribute ' + error_obj.atribute + ' with no value assigned to it, please give it a value');
             }
         }
     };

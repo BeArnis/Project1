@@ -71,7 +71,6 @@ function visual(cola_lib, graph) {
 
     function render_subclass_line(d, g) {
 
-
         var id;
         var path = g.append('path')
             .attr('class', function(d) { return 'link ' + d.type; })
@@ -128,10 +127,9 @@ function visual(cola_lib, graph) {
 
 
     function render_link(d, g) {
-
         var id = 'assoc';
         var path = g.append('path')
-        .attr('id', 'a')
+        .attr('id', d.name + d.target.name)
         .attr('class', d.type)
         .attr('marker-end', 'url(#' + d.type + ')');
 
@@ -142,7 +140,7 @@ function visual(cola_lib, graph) {
             'text-anchor:middle; font: 26px sans-serif; fill: blue;')
           .append('textPath')
             .attr('class', 'instance_link')
-            .attr('xlink:href', '#a')
+            .attr('xlink:href', '#' + d.name + d.target.name)
             .attr('startOffset', '50%')
             .text(d.name);
     }
@@ -236,8 +234,10 @@ function visual(cola_lib, graph) {
             .call(cola_a.drag);
 
 
-        var deep_atr = d.atribute;
+        var deep_atr = d.atribute_form_class;
 
+
+        
         g.selectAll('.atribute')
             .data(deep_atr)
             .enter()
@@ -246,7 +246,9 @@ function visual(cola_lib, graph) {
              .attr('transform', 'translate(' + margin / 2 + ',' +
                 (20 + margin / 2) + ')')
              .text(function(d) {
-                return d + ': ' + deep_atr[d];})
+                console.log(d);
+                return d.atribut + ': ' + d.value_name;
+             })
              .call(cola_a.drag)
              .attr('x', 0)
              .each(function(d) {

@@ -121,26 +121,32 @@
     myrep.add_generalization('animal', 'bird');
     myrep.add_generalization('human', 'baby');
     myrep.add_generalization('bird', 'egg');
-    myrep.add_generalization('a', 'living');
+    myrep.add_generalization('m', 'living');
     myrep.add_instance('lol');
     myrep.add_instance('yolo');
     myrep.add_instance('wtf');
-    myrep.add_link('lol', 'hohoho', 'yolo');
+    myrep.add_link('lol', 'white', 'yolo');
+    myrep.add_link('wtf', 'white', 'lol');
     myrep.add_instance_of('egg', 'lol');
-    myrep.add_instance_of('mutant', 'yolo');
-    myrep.add_instance_of('animal', 'wtf');
+    myrep.add_instance_of('egg', 'yolo');
+    myrep.add_instance_of('egg', 'wtf');
+    //myrep.add_instance_of('z', 'lol');
     myrep.add_atribute('animal', 'Legs');
     myrep.add_atribute('animal', 'Head_something');
     myrep.add_atribute('animal', 'Tail');
     myrep.add_atribute('bird', 'beak');
-    myrep.add_atribute_value('lol', 'ah', '1');
-    myrep.add_atribute_value('lol', 'beh', '2');
-    myrep.add_atribute_value('lol', 'meh', 'asldjg');
-    myrep.add_association('egg', 'white', '1',
-     '*', 'bird', 'Draugi', '1', '*');
-    myrep.add_association('A', 'b', '1', '2', 'B', 'a', '1', '3');
+    console.log('start');
+    myrep.add_atribute_value('lol', 'Tail', 'asldjg');
+    myrep.add_atribute_value('lol', 'Tail', '1');
+    myrep.add_atribute_value('lol', 'beak', 'small');
+    myrep.add_atribute_value('lol', 'Legs', 'normal');
+    console.log('end');
+    myrep.add_association('egg', 'white', '2',
+    '*', 'z', 'Draugi', '1', '*');
+    myrep.add_association('animal', 'dog', '0',
+    '2', 'human', 'child', '1', '3');
     myrep.get_atribute('animal');
-    console.log(myrep.get_atribute('animal'));
+    //console.log(myrep.get_atribute('animal'));
     var lin = (myrep.select_all_generalizations())
       .concat(myrep.select_all_instances_of());
     var lin2 = lin.concat(myrep.select_all_assoc());
@@ -169,14 +175,21 @@
             .value()
       }
     ];
-    myrep.get_class_kard();
-    //var land = myrep.get_super_class('mutant');
-    myrep.transitive_closure_get_atributes('A');
+
     myrep.transitive_closure_get_atributes_all_classes();
-    myrep.instance_gets_assoc_info('lol');
-    myrep.instance_link_validation('lol');
+    myrep.add_class_atributes_to_all_instances();
+    myrep.add_atribute_errors_to_all_instances();
+
+    myrep.instance_link_validation_start('lol');
+    
+    //myrep.instance_link_validation('lol');
     //console.log(myrep.is_instance_of('wtf', 'bird'));
-    myrep.is_cycle('animal');
+    myrep.transitive_closure_is_cycle_all_classes();
+    myrep.get_assoc_info_for_subclass('egg');
+    
+    myrep.class_error('animal');
+    myrep.instance_error('lol');
+    //myrep.instance_gets_atributes_from_instance_of_class('lol');
     visual(cola, graph);
 
 </script>

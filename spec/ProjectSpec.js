@@ -164,11 +164,17 @@ describe('Class diagramm', function() {
         expect(myrep.exists_link('darbinieks', 'atbildigais', 'saimnieks')).toEqual(true);
     });
     it(' should return true when atribute is added to an instances and checked if it is there', function() {
+        myrep.add_class('maja');
+        myrep.add_atribute('maja', 'Iedzīvotājs');
         myrep.add_instance('dzīvoklis');
+        myrep.add_instance_of('maja', 'dzīvoklis');
         myrep.add_atribute_value('dzīvoklis', 'Iedzīvotājs', 'baiba');
+        myrep.instance_error('dzīvoklis');
         expect(myrep.exists_atribute_value('dzīvoklis', 'Iedzīvotājs', 'baiba')).toEqual(true);
     });
     it(' should return false when atribute is added to an instances, atribute is deleted and checked if it is there', function() {
+        myrep.add_class('maja');
+        myrep.add_atribute('maja', 'Iedzīvotājs');
         myrep.add_instance('dzīvoklis');
         myrep.add_atribute_value('dzīvoklis', 'Iedzīvotājs', 'baiba');
         myrep.delete_atribute_value('dzīvoklis', 'Iedzīvotājs', 'baiba');
@@ -208,7 +214,6 @@ describe('Class diagramm', function() {
         myrep.add_generalization('nation', 'land');
         myrep.add_generalization('land', 'building');
         var supercl = myrep.get_super_class('building');
-        console.log(supercl);
         var v1 = supercl.pop();
         var v2 = supercl.pop();
         expect(myrep.exists_class(v1.name)).toEqual(true);
@@ -284,7 +289,8 @@ describe('Class diagramm', function() {
         myrep.add_link('room1', 'floor', 'room2');
         myrep.add_instance_of('building', 'room1');
         myrep.instance_gets_assoc_info('room1');
-        expect(myrep.instance_link_validation('room1')).toEqual(false);
+        console.log(myrep.instances['room1']['assoc_from_class']);
+        expect(myrep.instance_link_validation_end('room1')).toEqual(false); //nepadod vertibu
     });
     it(' should add an error to the instance if the instance has a kardinality and does not have as many links as the cardinality says', function() {
         myrep.add_class('building');
@@ -297,7 +303,6 @@ describe('Class diagramm', function() {
         var role = myrep.instances.room1.assoc_from_class[0].role;
         var min = myrep.instances.room1.assoc_from_class[0].min;
         var max = myrep.instances.room1.assoc_from_class[0].max;
-        console.log(myrep.instances.room1.assoc_from_class[0]);
         expect(other_class).toEqual('land');
         expect(role).toEqual('floor');
         expect(min).toEqual('2');
