@@ -121,6 +121,8 @@
     myrep.add_generalization('animal', 'bird');
     myrep.add_generalization('human', 'baby');
     myrep.add_generalization('bird', 'egg');
+    myrep.add_generalization('bird', 'egg');
+    myrep.add_generalization('m', 'living');
     myrep.add_generalization('m', 'living');
     myrep.add_instance('lol');
     myrep.add_instance('yolo');
@@ -129,7 +131,7 @@
     myrep.add_link('wtf', 'white', 'lol');
     myrep.add_instance_of('egg', 'lol');
     myrep.add_instance_of('egg', 'yolo');
-    myrep.add_instance_of('egg', 'wtf');
+    myrep.add_instance_of('animal', 'wtf');
     //myrep.add_instance_of('z', 'lol');
     myrep.add_atribute('animal', 'Legs');
     myrep.add_atribute('animal', 'Head_something');
@@ -188,7 +190,8 @@
     myrep.get_assoc_info_for_subclass('egg');
     
     myrep.class_error('animal');
-    myrep.instance_error('lol');
+    myrep.instance_error('wtf');
+    myrep.get_cycle_classes('animal');
     //myrep.instance_gets_atributes_from_instance_of_class('lol');
     visual(cola, graph);
 

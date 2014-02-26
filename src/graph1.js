@@ -1,5 +1,12 @@
 function visual(cola_lib, graph) {
 
+
+    _.mixin({
+            console: function(string) {
+                return console.log(string);
+            }
+    });
+
     var width = 3060,
         height = 3200;
 
@@ -73,7 +80,7 @@ function visual(cola_lib, graph) {
 
         var id;
         var path = g.append('path')
-            .attr('class', function(d) { return 'link ' + d.type; })
+            .attr('class', function(d) { return 'path link ' + d.type; })
             .attr('marker-end', function(d) { return 'url(#' + d.type + ')'; });
     }
 
@@ -237,7 +244,6 @@ function visual(cola_lib, graph) {
         var deep_atr = d.atribute_form_class;
 
 
-        
         g.selectAll('.atribute')
             .data(deep_atr)
             .enter()
@@ -246,7 +252,7 @@ function visual(cola_lib, graph) {
              .attr('transform', 'translate(' + margin / 2 + ',' +
                 (20 + margin / 2) + ')')
              .text(function(d) {
-                console.log(d);
+                //console.log(d);
                 return d.atribut + ': ' + d.value_name;
              })
              .call(cola_a.drag)
@@ -372,17 +378,82 @@ function visual(cola_lib, graph) {
             .attr('d', function(d) {
                 return arcPath(d.source.x < d.target.x, d);
             });
+        var mega_path_arr = [];
+
+        link.selectAll('.path')
+            .each(function(d) {// path elements
+                var path = d3.select(this);
+
+                mega_path_arr.push(get_path_coord(d.source.x < d.target.x, d));
+                
+            });
+
+
+        
+
+
+        var repeats = _.chain(mega_path_arr)
+            .countBy(function(obj) {
+                var all_startx = _.pluck(mega_path_arr, 'startx')
+                //console.log(all_startx);
+                var mas = [obj.startx, obj.path]
+                //console.log(obj);
+                return obj.startx;
+            })
+            .filter(function(count_arr) {
+                return count_arr == 2;
+            })
+            //.uniq()
+            //value()
+            .console()
 
 
 
+            //console.log(repeats);
+
+        /*var path_groups = _.countBy(mega_path_arr, function(path_coo) {
+            var all_startx = _.pluck(mega_path_arr, 'startx')
+            /*var uniq = _.uniq(all_startx);
+            var dif = _.without(all_startx, uniq);
+            var string = null;*/
+            //console.log(path_coo);
+            //console.log(all_startx);                     //_.contains(dif, path_coo.startx)
+            //if (_.contains(dif, path_coo.startx)) {
+                                      //path_coo.startx + '-' + path_coo.starty;
+            //}
+            //console.log(all_startx);
+            /*return path_coo.startx;
+        });
+        console.log(path_groups);*/
     });
+
 
     function arcPath(leftHand, d) {
 
         var start = leftHand ? d.sourceIntersection : d.arrowStart,
         end = leftHand ? d.arrowStart : d.sourceIntersection;
-
+        //console.log(d);
         return 'M' + start.x + ',' + start.y + 'L' + end.x + ',' + end.y;
     }
 
+    function get_path_coord(leftHand, d) {
+        var start = leftHand ? d.sourceIntersection : d.arrowStart,
+        end = leftHand ? d.arrowStart : d.sourceIntersection;
+
+        var arr = {
+            startx: start.x,
+            starty: start.y,
+            endx: end.x,
+            endy: end.y,
+            source: d.source,
+            target: d.target,
+            path: d
+        };
+
+        //_.console('lol');
+
+        //[start.x, start.y, end.x, end.y];
+
+        return arr;
+    }
 }

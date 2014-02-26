@@ -466,7 +466,7 @@ function rep_init() {
                     obj.class[class_name]['something_is_wrong'] = 'error';
                     var error = {
                         error_type: '#2',
-                        class_call: class_name
+                        class_name: class_name
                     }
 
                     //'class ' + class_name + ' is in a cycle';
@@ -577,8 +577,8 @@ function rep_init() {
             } else {
                 this.instances[instance_name]['something_is_wrong'] = 'error';
                 var error = {
-                    error_type: 'not_inst_of_class',
-                    class_call: class_name,
+                    error_type: '#5',
+                    class_name: class_name,
                     instance: instance_name
                 };
                 //'error: incstance ' + instance_name + ' is not under class ' + class_name;
@@ -620,7 +620,7 @@ function rep_init() {
             _.each(difference, function(no_value) {
                 obj.instances[instance_name]['something_is_wrong'] = 'error';
                 var error = {
-                    error_type: '#5',
+                    error_type: '#6',
                     instance: instance_name,
                     atribute: no_value
                 }
@@ -651,17 +651,34 @@ function rep_init() {
             });
         },
         error_handle: function(error_obj) {
+            console.log(error_obj);
             if (error_obj.error_type == '#1') {
                 console.warn('No such ' + error_obj.atribute + ' atribute exists in instance' + error_obj.instance + ' , dont add atribute values to atributes that dont exist');
             } else if (error_obj.error_type == '#2') {
-                console.warn('class ' + error_obj.class_call + ' is in a cycle');
+                var cycle_classes = this.get_cycle_classes(error_obj.class_name);
+                console.warn('Class ' + error_obj.class_name + ' is in a cycle' + ' in class cycle : ' + cycle_classes.join(', '));
             } else if (error_obj.error_type == '#3') {
-                console.warn('error: incstance ' + error_obj.instance + ' has not enough links with linkname ' + role);
+                console.warn('Incstance ' + error_obj.instance + ' has not enough links with linkname ' + role);
             } else if (error_obj.error_type == '#4') {
-                console.warn('error: incstance ' + error_obj.instance + ' has not too many links with linkname ' + role);
+                console.warn('Incstance ' + error_obj.instance + ' has not too many links with linkname ' + role);
             } else if (error_obj.error_type == '#5') {
+                console.warn('Incstance ' + error_obj.instance + ' is not instance_of class ' + error_obj.class_name + ' or any of its subclasses');
+            } else if (error_obj.error_type == '#6') {
                 console.warn('Instance ' + error_obj.instance + ' has an atribute ' + error_obj.atribute + ' with no value assigned to it, please give it a value');
             }
+        },
+        get_cycle_classes: function(class_name) {
+            if (this.is_cycle(class_name)) {
+                var upper_class = this.get_super_class(class_name);
+                var name_arr = [];
+                var obj = this;
+
+                _.each(upper_class, function(superclass_obj) {
+                    name_arr.push(superclass_obj.name);
+                })
+                console.log(name_arr);
+            }
+            return name_arr;
         }
     };
     return repository;
